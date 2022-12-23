@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import ttk # treeview
 from tkinter import messagebox 
-from PIL import ImageTk,Image  
+from PIL import ImageTk,Image
 import os
 
 
@@ -23,10 +23,10 @@ y = (screenHeight/2) - (appHeight/2)
 window.geometry("{:.0f}x{:.0f}+{:.0f}+{:.0f}" .format(appWidth, appHeight, int(x), int(y)))
 
 window.title("ToDoList")
-
+imgNot = ImageTk.PhotoImage(Image.open("img/notificacao.png"))
 
 #Botões de conta
-btnNotificacao = Button(window, width = 5, height= 2, bd=1, image = "img\notificacao.png", compound=LEFT, relief = "raised")
+btnNotificacao = Button(window, width = 30, height= 30, bd=1, image = imgNot, compound=LEFT, relief = "raised")
 btnNotificacao.place(x=450, y=0)
 
 btnInciarSessao = Button(window, width = 20, height= 2, text = "Iniciar Sessões", bd=1, fg='black', relief = "raised")
