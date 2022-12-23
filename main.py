@@ -24,7 +24,11 @@ window.geometry("{:.0f}x{:.0f}+{:.0f}+{:.0f}" .format(appWidth, appHeight, int(x
 
 window.title("ToDoList")
 
+
 #Botões de conta
+btnNotificacao = Button(window, width = 5, height= 2, bd=1, image = "img\notificacao.png", compound=LEFT, relief = "raised")
+btnNotificacao.place(x=450, y=0)
+
 btnInciarSessao = Button(window, width = 20, height= 2, text = "Iniciar Sessões", bd=1, fg='black', relief = "raised")
 btnInciarSessao.place(x=500, y=0)
 
