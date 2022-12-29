@@ -7,35 +7,26 @@ import os
 
 
 def register_user():
-    usernameInfo = username.get()
-    passwordInfo = password.get()
-    emailInfo    = email.get()
-
     try:
         with open("Files/users.txt", "r") as file:
             print("File exists")
     except FileNotFoundError:
         with open("Files/users.txt", "w") as file:
 
-            file.write("admin" + ";" + "123" + ";" + "admin@gmail.com" + ";" + "admin" + "\n")
-
             file.write(
-                usernameInfo + ";" + 
-                passwordInfo + ";" + 
-                emailInfo + ";" + 
-                "normal" + "\n")
+                "totalActivities" + ";" +
+                "currentActivities" + ";" +
+                "admin" + ";" +
+                "123" + ";" +
+                "admin@gmail.com" + ";" +
+                "admin" + ";" +
+                "\n")
 
-            messagebox.showinfo("Account was successfully!", "Your new account has been created!")
+            messagebox.showinfo("Error, file does not exist!", "The file did not exist but we created one for you, try registering now!")
     else:
-        with open("Files/users.txt", "a") as file:
+            if validateReg():
+                pass
 
-            file.write(
-                usernameInfo + ";" + 
-                passwordInfo + ";" + 
-                emailInfo + ";" + 
-                "normal" + "\n")
-            messagebox.showinfo("Account was successfully!", "Your new account has been created!")
-        
 
     usernameEntry.delete(0,END)
     passwordEntry.delete(0,END)
@@ -44,38 +35,53 @@ def register_user():
     screen1.destroy()
 
 
+def saveUser():
+    usernameInfo = username.get()
+    passwordInfo = password.get()
+    emailInfo    = email.get()
+
+    with open("Files/users.txt", "a") as file:
+        file.write(
+                "totalActivities" + ";" +
+                "currentActivities" + ";" +
+                usernameInfo + ";" +
+                passwordInfo + ";" +
+                emailInfo + ";" +
+                "normal" + ";" +
+                "\n")
+        messagebox.showinfo("Account was successfully!", "Your new account has been created!")
 def validateReg():
-    while True:
+
         userRegValidate = username.get()
         passRegValidate = password.get()
         emailRegValidate= email.get()
         validForm = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
-        
+
         if len(userRegValidate) < 4:
             messagebox.showerror("Invalid Username!", "Username needs to be at least 4 characters long!")
             username.set("")
             password.set("")
             email.set("")
-            break
-        
+
+
         if len(passRegValidate) < 6:
             messagebox.showerror("Invalid Password!", "Password should be at least 6 chatacters long!")
             username.set("")
             password.set("")
             email.set("")
-            break
-        
-        # if (re.fullmatch(validForm, emailRegValidate)):
-        #     register_user()
-        #     break
-            
-        # else:
-        #     messagebox.showerror("Invalid E-Mail", "Your E-Mail must include the characters '@' and '.'")
-        #     username.set("")
-        #     password.set("")
-        #     email.set("")
-        
-                                           
+
+
+        if (re.fullmatch(validForm, emailRegValidate)):
+            saveUser()
+
+
+        else:
+            messagebox.showerror("Invalid E-Mail", "Your E-Mail must include the characters '@' and '.'")
+            username.set("")
+            password.set("")
+            email.set("")
+
+
 def register():
     global screen1
     screen1 = Toplevel()
@@ -107,7 +113,7 @@ def register():
     emailEntry.pack()
 
     Button(screen1, text = "Register", width = 10, height = 1, command = register_user).pack()
-  
+
 
 
 def loginSuccess():
@@ -145,13 +151,13 @@ def loginValidation():
                 if username1 == Fields[0]:
                     if password1 == Fields[1]:
                         screen2.destroy()
-                        loginSuccess()                   
+                        loginSuccess()
                         print("login done move to page")
                     return
                 else:
                     invalidPassword()
             else: userNotFound()
-    
+
 
 def login():
     global screen2
@@ -164,8 +170,8 @@ def login():
     screen2.geometry("300x250")
     Label(screen2,text = "Please enter your information").pack()
     Label(screen2,text = "").pack()
-     
-    
+
+
     usernameValidation = StringVar()
     passwordValidation = StringVar()
 
@@ -179,3 +185,44 @@ def login():
     Label(screen2,text = "").pack()
     Button(screen2, text = "Login", width = 10, height = 1,command = loginValidation).pack()
 
+
+def taskValidation():
+    with open("Files/users.txt", "r") as file:
+        userList = file.readlines()
+        #Obter o index de uma linha utilizando o username
+        for i in range(len(userList)):
+            if userChosen.get() in userList[i]:
+                index = i
+            #verifica as atividades do utilizador no momento em que vai fazer logout. este valor sera depois comparado com o total de atividades de forma a criar a notificação
+            currentActivities = len(userList[index].split(";")[5:-1])
+                #escrever a nova atividade no fim da linha do utilizador e separar por ";"    
+        with open("Files/users.txt", "w") as file:
+            userList[index] = userList[index].rstrip() + activityChosen.get() + ";" + "\n"
+            userList[index] = userList[index].replace(userList[index].split(";")[1], str(currentActivities))
+            file.writelines(userList)
+        
+        print(userList[index].split(";")[1])
+        print(currentActivities)
+        print(userList)      
+
+
+def addTask():
+    global screen3
+    global userChosen
+    global activityChosen
+
+    userChosen = StringVar()
+    activityChosen = StringVar()
+
+    screen3 = Toplevel()
+    screen3.title("Adicionar tarefa")
+    screen3.geometry("300x250")
+    Label(screen3,text = "").pack()
+    Label(screen3,text = "What user do you want to send an acitivity to?").pack()
+    userSelectEntry = Entry(screen3, textvariable = userChosen)
+    userSelectEntry.pack()
+    Label(screen3,text = "").pack()
+    Label(screen3,text="What activity would you like to send?").pack()
+    activityEntry = Entry(screen3, textvariable = activityChosen)
+    activityEntry.pack()
+    Button(screen3,text = "Send activity", width = 10, height = 1,command = taskValidation).pack()

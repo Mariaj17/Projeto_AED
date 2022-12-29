@@ -35,5 +35,7 @@ btnInciarSessao.place(x=500, y=0)
 btnCriarConta = Button(window, width = 20, height= 2, text = "Criar Conta", bd=1, fg='black', relief = "raised",command = register)
 btnCriarConta.place(x=650, y=0)
 
+btnAdicionarTarefa = Button(window, width = 20, height= 2, text= "Adicionar tarefa", bd=1, fg='black', relief = "raised", command=addTask)
+btnAdicionarTarefa.place(x=350, y=0)
 
 window.mainloop()
