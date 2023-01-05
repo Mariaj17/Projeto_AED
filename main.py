@@ -19,14 +19,18 @@ global x, y
 
 
 #-----------------------------------Functions-----------------------------#
-# def init():
-#     with open("Files/users.txt", "r") as file:
-#         users = file.readlines()
-#         for user in users:
-#             users[user] = users[user].replace(users[user].split(";")[4], "False")
-#             file.writelines()
 
-# init()
+    #caso um utilizador logado desligue a pagina de forma forçada a aplicação ao inicializar vai colocar como falso o login de todos os users 
+def init():
+    with open("Files/users.txt", "r") as file:
+        users = file.readlines()
+        for i in range(len(users)):
+            user = users[i]
+            users[i] = user.replace(user.split(";")[4], "False")
+    with open("Files/users.txt", "w") as file:
+        file.writelines(users)
+
+init()
 
 def changeButton(text,command):
     btnInciarSessao.config(text=text, command=command)
