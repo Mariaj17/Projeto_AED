@@ -22,27 +22,62 @@ global x, y
 
     #caso um utilizador logado desligue a pagina de forma forçada a aplicação ao inicializar vai colocar como falso o login de todos os users 
 def init():
-    with open("Files/users.txt", "r") as file:
-        users = file.readlines()
-        for i in range(len(users)):
-            user = users[i]
-            users[i] = user.replace(user.split(";")[4], "False")
-    with open("Files/users.txt", "w") as file:
-        file.writelines(users)
-
+    try:
+        with open("Files/users.txt", "r") as file:
+            users = file.readlines()
+            for i in range(len(users)):
+                user = users[i]
+                users[i] = user.replace(user.split(";")[4], "False")
+        with open("Files/users.txt", "w") as file:
+            file.writelines(users)
+    except FileNotFoundError:
+        with open("Files/users.txt", "w") as file:
+            file.write(
+                "totalActivities" + ";" +
+                "currentActivities" + ";" +
+                "admin" + ";" +
+                "123" + ";" +
+                "False" + ";" +
+                "admin@gmail.com" + ";" +
+                "admin" + ";" +
+                "\n")       
+        
 init()
+
+
+def notification(userFile, user):
+    with open (userFile, "r") as file:
+        lines = file.readlines()
+        for line in lines:
+            if user in line:
+                # newActivities = lines[user].split(";")[6:-1]
+                # print(newActivities)
+                values = line.strip().split(";")
+                try:
+                    if int(values[1]) > int(values[0]):
+                        newTasksAmount = int(values[1]) - int(values[0])
+                        tasksList = values[7:]
+                        tasks = " | ".join(tasksList)
+                        messagebox.showinfo("New tasks", f"You have {newTasksAmount} new tasks available that were sent while you were offline! Those tasks are... {tasks}")
+                except ValueError:
+                    pass
+
 
 def changeButton(text,command):
     btnInciarSessao.config(text=text, command=command)
 
 def logout():
+    global username1
     with open("Files/users.txt", "r") as file:
         users = file.readlines()
         for i in range(len(users)):
             if username1 in users[i]:
                 index = i
+
+        totalActivities = len(users[index].split(";")[6:-1])
         with open("Files/users.txt", "w") as file:       
             users[index] = users[index].replace(users[index].split(";")[4], "False")
+            users[index] = users[index].replace(users[index].split(";")[0], str(totalActivities))
             file.writelines(users)
             if utils.checkUserLogged(username1, users) == True:
                 changeButton("Terminar sessão",logout)
@@ -99,6 +134,7 @@ def loginValidation():
                         loginSuccess()
                         loggedUser(username1, Fields[0])  # devolve o nome to utilizador e o index da linha to ficheiro do utilizador
                         print("login done move to page")
+                        notification("Files/users.txt", username1)
                         return
                     else:
                         invalidPassword()

@@ -5,6 +5,7 @@ import tkinter as tk
 import re
 import os
 
+
 def register_user():
     try:
         with open("Files/users.txt", "r") as file:
@@ -131,19 +132,26 @@ def userNotFound():
 
 
 def taskValidation():
+    index = 0
     with open("Files/users.txt", "r") as file:
         userList = file.readlines()
         #Obter o index de uma linha utilizando o username
         for i in range(len(userList)):
             if userChosen.get() in userList[i]:
                 index = i
-            #verifica as atividades do utilizador no momento em que vai fazer logout. este valor sera depois comparado com o total de atividades de forma a criar a notificação
-            currentActivities = len(userList[index].split(";")[5:-1])
+                #verifica as atividades do utilizador no momento em que vai fazer logout. este valor sera depois comparado com o total de atividades de forma a criar a notificação
+                currentActivities = len(userList[index].split(";")[6:-1])
                 #escrever a nova atividade no fim da linha do utilizador e separar por ";"    
         with open("Files/users.txt", "w") as file:
-            userList[index] = userList[index].rstrip() + activityChosen.get() + ";" + "\n"
+            line = userList[index].strip().split(";")
+            line[1] = str(currentActivities)
+            line.append(activityChosen.get())
+            userList[index] = ";".join(line) + "\n"
+            
             userList[index] = userList[index].replace(userList[index].split(";")[1], str(currentActivities))
             file.writelines(userList)
+            messagebox.showinfo("Task sent!", f"The task you selected for {userChosen.get()} will be going his way!")
+            screen3.destroy()
         
         print(userList[index].split(";")[1])
         print(currentActivities)
@@ -151,22 +159,34 @@ def taskValidation():
 
 
 def addTask():
-    global screen3
-    global userChosen
-    global activityChosen
+    messageShown = False
+    with open("Files/users.txt", "r") as file:
+        users = file.readlines()
+        for user in users:
+            if user.split(";")[4] == "True":
+                global screen3
+                global userChosen
+                global activityChosen
 
-    userChosen = StringVar()
-    activityChosen = StringVar()
+                userChosen = StringVar()
+                activityChosen = StringVar()
 
-    screen3 = Toplevel()
-    screen3.title("Adicionar tarefa")
-    screen3.geometry("300x250")
-    Label(screen3,text = "").pack()
-    Label(screen3,text = "What user do you want to send an acitivity to?").pack()
-    userSelectEntry = Entry(screen3, textvariable = userChosen)
-    userSelectEntry.pack()
-    Label(screen3,text = "").pack()
-    Label(screen3,text="What activity would you like to send?").pack()
-    activityEntry = Entry(screen3, textvariable = activityChosen)
-    activityEntry.pack()
-    Button(screen3,text = "Send activity", width = 10, height = 1,command = taskValidation).pack()
+                screen3 = Toplevel()
+                screen3.title("Adicionar tarefa")
+                screen3.geometry("300x250")
+                Label(screen3,text = "").pack()
+                Label(screen3,text = "What user do you want to send an acitivity to?").pack()
+                userSelectEntry = Entry(screen3, textvariable = userChosen)
+                userSelectEntry.pack()
+                Label(screen3,text = "").pack()
+                Label(screen3,text="What activity would you like to send?").pack()
+                activityEntry = Entry(screen3, textvariable = activityChosen)
+                activityEntry.pack()
+                Button(screen3,text = "Send activity", width = 10, height = 1,command = taskValidation).pack()   
+                messageShown = True          
+
+            if messageShown == False:
+                messagebox.showerror("Not logged in!", "You cannot sed a new task to a user if you are not logged in!")
+                messageShown = True
+
+
