@@ -5,6 +5,8 @@ from PIL import ImageTk,Image
 import os
 from users import *
 import utils
+from tarefas import *
+from categorias import *
 
 
 
@@ -168,6 +170,77 @@ def login():
     passwordEntry1.pack()
     Label(screen2,text = "").pack()
     Button(screen2, text = "Login", width = 10, height = 1,command = loginValidation).pack()
+
+def GerirTarefas():
+    createDropCategory()
+
+    windowTarefas = Toplevel()   # Objeto da classe Toplevel, janela principal
+    windowTarefas.title("Criar Tarefas") 
+    windowTarefas.geometry("{:.0f}x{:.0f}+{:.0f}+{:.0f}" .format(appWidth, appHeight, int(x), int(y)))
+    windowTarefas.focus_force()     # Força toda a interação com a janela atual (top window)
+    windowTarefas.grab_set()
+
+    lblTarefa = Label(windowTarefas, text = "Tarefa")
+    lblTarefa.place(x=70, y=70)
+
+    tarefa = StringVar()
+    inputTarefa = Entry(windowTarefas, width=25, textvariable=tarefa)
+    inputTarefa.place(x=120, y= 70) 
+
+    lblData = Label(windowTarefas, text = "Data")
+    lblData.place(x=70, y=120)
+
+    data = StringVar()
+    entryData = Entry(windowTarefas, width=25, textvariable=data)
+    entryData.place(x=120, y= 120) 
+
+    categoria = StringVar()                     
+    categoria.set("Estudos")
+    dropCategoria = OptionMenu(windowTarefas, categoria ,*options)
+    dropCategoria.pack()
+    dropCategoria.place(x=120, y= 180)
+
+    lblCategoria = Label(windowTarefas, text = " ")
+    lblCategoria.place(x=120, y= 170)
+    lblCategoria.pack()
+
+    estadoTarefa = StringVar()
+    estadoTarefa.set("Por fazer")
+    rd1 = Radiobutton(windowTarefas, text = "Por fazer", value = "Por fazer", variable= estadoTarefa)
+    rd2 = Radiobutton(windowTarefas, text = "A fazer", value = "A fazer",     variable= estadoTarefa)
+    rd3 = Radiobutton(windowTarefas, text = "Feito", value = "Feito",         variable= estadoTarefa)
+    rd1.place(x= 120, y= 220)
+    rd2.place(x= 120, y= 250)
+    rd3.place(x= 120, y= 280)
+
+    lstTarefas = Listbox(windowTarefas, width = 40, height=12)
+    lstTarefas.place(x= 400, y=70)
+
+    listaTarefas= lerTarefas()
+    refreshListboxTarefas(listaTarefas, lstTarefas)
+
+    btnInserir = Button(windowTarefas, text='Inserir', width=10, height=3, 
+        command= lambda: inserirTarefa(username, tarefa.get(), data.get(), categoria.get(), estadoTarefa.get(), lstTarefas))
+    btnInserir.place(x=400, y= 350)
+    
+    btnRemover = Button(windowTarefas, text='Remover', width=10, height=3, 
+        command= lambda: inserirTarefa(tarefa.get(), data.get(), categoria.get(), estadoTarefa.get()))
+    btnRemover.place(x=550, y= 350)
+
+def renderizarTree(username, listaTree):
+    f = open(fTarefas, "r", encoding="utf-8")
+    lista = f.readlines()
+    f.close()
+    for linha in lista:
+        campos = linha.split(";")        
+        if username.get() == "" or username.get() == campos[0]:
+            listaTree.append([])   # append de uma sublista vazia
+            listaTree[i].append(campos[1])
+            listaTree[i].append(campos[2])
+            listaTree[i].append(campos[3])
+            listaTree[i].append(campos[4])
+            i+=1
+            tree.insert("", "end", values = (campos[1], campos[2], campos[3], campos[4]))
 #-----------------------------------MainScreen----------------------------#
 
 
@@ -200,5 +273,35 @@ btnCriarConta.place(x=650, y=0)
 
 btnAdicionarTarefa = Button(window, width = 20, height= 2, text= "Adicionar tarefa", bd=1, fg='black', relief = "raised", command=addTask)
 btnAdicionarTarefa.place(x=350, y=0)
+
+#Canvas com botões da esquerda
+btnCanvas = Canvas(window, width = 205, height = 505, bd = 2, bg='gray', relief = "flat")
+btnCanvas.place(x=-5, y=-5)
+
+btnCriarTaref = Button(btnCanvas, width = 20, height= 5, text = "Criar Tarefa", bd=1, fg='black', relief = "raised", command=GerirTarefas)
+btnCriarTaref.place(x=40, y=50)
+
+btnPesquisa = Button(btnCanvas, width = 20, height= 5, text = "Pesquisa", bd=1, fg='black', relief = "raised")
+btnPesquisa.place(x=40, y=150)
+
+btnDashboard = Button(btnCanvas, width = 20, height= 5, text = "Área Pessoal", bd=1, fg='black', relief = "raised")
+btnDashboard.place(x=40, y=250)
+
+btnGerirCat = Button(btnCanvas, width = 20, height= 5, text = "Gerir Categorias", bd=1, fg='black', relief = "raised")
+btnGerirCat.place(x=40, y=350)
+
+treePanel = PanedWindow(window, width = 585, height = 250, bd = 4, relief = "sunken")
+treePanel.place(x=205, y=40)
+
+tree = ttk.Treeview(treePanel, columns = ("Tarefa", "Categoria", "Estado", "Data"), show = "headings")
+tree.column("Tarefa", width = 120,   anchor="c")         #string
+tree.column("Categoria", width = 120,  anchor="c")      #drop-dowon    # c- center, e - direita, w- esquerda
+tree.column("Estado", width = 120,   anchor="c")        #radio
+tree.column("Data", width = 100,   anchor="c")
+tree.heading("Tarefa", text = "Nome")
+tree.heading("Categoria", text = "Categoria")
+tree.heading("Estado", text = "Estado")
+tree.heading("Data", text = "Data")
+tree.place(x=5, y=5)
 
 window.mainloop()
