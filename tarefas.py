@@ -12,9 +12,9 @@ if not os.path.exists(pasta):
 f=open(fTarefas, "a", encoding="utf-8")
 f.close()
 
-def inserirTarefa(username, tarefa, data, categoria, estadoTarefa, lstTarefas):
+def inserirTarefa(tarefa, data, categoria, estadoTarefa, lstTarefas):
     fileTarefa=open(fTarefas, "a", encoding="utf-8")
-    linha = username + ";" + tarefa + ";" + data + ";" + categoria + ";" + estadoTarefa + "\n" 
+    linha = tarefa + ";" + data + ";" + categoria + ";" + estadoTarefa + "\n" 
     fileTarefa.write(linha)
     fileTarefa.close()
     

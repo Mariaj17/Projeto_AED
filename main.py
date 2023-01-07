@@ -220,7 +220,7 @@ def GerirTarefas():
     refreshListboxTarefas(listaTarefas, lstTarefas)
 
     btnInserir = Button(windowTarefas, text='Inserir', width=10, height=3, 
-        command= lambda: inserirTarefa(username, tarefa.get(), data.get(), categoria.get(), estadoTarefa.get(), lstTarefas))
+        command= lambda: inserirTarefa(tarefa.get(), data.get(), categoria.get(), estadoTarefa.get(), lstTarefas))
     btnInserir.place(x=400, y= 350)
     
     btnRemover = Button(windowTarefas, text='Remover', width=10, height=3, 

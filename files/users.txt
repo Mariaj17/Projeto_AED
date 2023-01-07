@@ -1,2 +1,2 @@
 totalActivities;currentActivities;admin;123;False;admin@gmail.com;admin;
-totalActivities;currentActivities;riki;123456;True;riki@gmail.com;normal;
+totalActivities;currentActivities;riki;123456;False;riki@gmail.com;normal;
