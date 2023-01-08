@@ -32,3 +32,15 @@ def refreshListboxTarefas(listaTarefas, lstTarefas):
     for item in listaTarefas:
         item = item.replace(";", "  ")
         lstTarefas.insert(END, item)
+
+def removeTarefas(lstTarefas, tarefa):
+    lstTarefas.delete(lstTarefas.curselection())
+    tarefa.set("")
+    
+    lista = lerTarefas()
+    refreshListboxTarefas(lista, lstTarefas)
+
+def selecaoTarefa(lstTarefas, tarefa):
+    indice = lstTarefas.curselection()   # Índice da linha selecionada
+    texto = lstTarefas.get(indice)       # Obter conteudo da Listbox, linha selecionada 
+    tarefa.set(texto)
