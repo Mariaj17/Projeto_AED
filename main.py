@@ -180,6 +180,22 @@ def GerirTarefas():
     windowTarefas.focus_force()     # Força toda a interação com a janela atual (top window)
     windowTarefas.grab_set()
 
+    #Canvas com botões da esquerda
+    btnCanvas = Canvas(windowTarefas, width = 205, height = 505, bd = 2, bg='gray', relief = "flat")
+    btnCanvas.place(x=-5, y=-5)
+
+    btnCriarTaref = Button(btnCanvas, width = 20, height= 5, text = "Criar Tarefa", bd=1, fg='black', relief = "raised", command=GerirTarefas)
+    btnCriarTaref.place(x=40, y=50)
+
+    btnPesquisa = Button(btnCanvas, width = 20, height= 5, text = "Pesquisa", bd=1, fg='black', relief = "raised")
+    btnPesquisa.place(x=40, y=150)
+
+    btnDashboard = Button(btnCanvas, width = 20, height= 5, text = "Área Pessoal", bd=1, fg='black', relief = "raised")
+    btnDashboard.place(x=40, y=250)
+
+    btnGerirCat = Button(btnCanvas, width = 20, height= 5, text = "Gerir Categorias", bd=1, fg='black', relief = "raised")
+    btnGerirCat.place(x=40, y=350)
+
     lblTarefa = Label(windowTarefas, text = "Tarefa")
     lblTarefa.place(x=70, y=70)
 
@@ -227,20 +243,20 @@ def GerirTarefas():
         command= lambda: inserirTarefa(tarefa.get(), data.get(), categoria.get(), estadoTarefa.get()))
     btnRemover.place(x=550, y= 350)
 
-def renderizarTree(username, listaTree):
+def renderizarTree(listaTree):
     f = open(fTarefas, "r", encoding="utf-8")
     lista = f.readlines()
     f.close()
     for linha in lista:
         campos = linha.split(";")        
-        if username.get() == "" or username.get() == campos[0]:
-            listaTree.append([])   # append de uma sublista vazia
-            listaTree[i].append(campos[1])
-            listaTree[i].append(campos[2])
-            listaTree[i].append(campos[3])
-            listaTree[i].append(campos[4])
-            i+=1
-            tree.insert("", "end", values = (campos[1], campos[2], campos[3], campos[4]))
+        #if username.get() == "" or username.get() == campos[0]:
+        listaTree.append([])   # append de uma sublista vazia
+        listaTree[i].append(campos[0])
+        listaTree[i].append(campos[1])
+        listaTree[i].append(campos[2])
+        listaTree[i].append(campos[3])
+        i+=1
+        tree.insert("", "end", values = (campos[0], campos[1], campos[2], campos[3]))
 #-----------------------------------MainScreen----------------------------#
 
 
@@ -275,8 +291,8 @@ btnAdicionarTarefa = Button(window, width = 20, height= 2, text= "Adicionar tare
 btnAdicionarTarefa.place(x=350, y=0)
 
 #Canvas com botões da esquerda
-btnCanvas = Canvas(window, width = 205, height = 505, bd = 2, bg='gray', relief = "flat")
-btnCanvas.place(x=-5, y=-5)
+btnCanvas = Canvas(window, width = 205, height = 455, bd = 2, bg='#a3d9ff', relief = "flat")
+btnCanvas.place(x=-5, y=40)
 
 btnCriarTaref = Button(btnCanvas, width = 20, height= 5, text = "Criar Tarefa", bd=1, fg='black', relief = "raised", command=GerirTarefas)
 btnCriarTaref.place(x=40, y=50)
@@ -291,13 +307,13 @@ btnGerirCat = Button(btnCanvas, width = 20, height= 5, text = "Gerir Categorias"
 btnGerirCat.place(x=40, y=350)
 
 treePanel = PanedWindow(window, width = 585, height = 250, bd = 4, relief = "sunken")
-treePanel.place(x=205, y=40)
+treePanel.place(x=210, y=40)
 
 tree = ttk.Treeview(treePanel, columns = ("Tarefa", "Categoria", "Estado", "Data"), show = "headings")
-tree.column("Tarefa", width = 120,   anchor="c")         #string
-tree.column("Categoria", width = 120,  anchor="c")      #drop-dowon    # c- center, e - direita, w- esquerda
-tree.column("Estado", width = 120,   anchor="c")        #radio
-tree.column("Data", width = 100,   anchor="c")
+tree.column("Tarefa", width = 140,   anchor="c")         #string
+tree.column("Categoria", width = 140,  anchor="c")      #drop-dowon    # c- center, e - direita, w- esquerda
+tree.column("Estado", width = 140,   anchor="c")        #radio
+tree.column("Data", width = 125,   anchor="c")
 tree.heading("Tarefa", text = "Nome")
 tree.heading("Categoria", text = "Categoria")
 tree.heading("Estado", text = "Estado")
