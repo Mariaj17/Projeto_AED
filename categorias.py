@@ -1,6 +1,8 @@
 import os
 
 def createDropCategory():
+    options.clear()
+
     f=open(fcategoria, "r", encoding="utf-8")
     ficha=f.readlines()
     f.close()

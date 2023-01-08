@@ -30,5 +30,5 @@ def lerTarefas():
 def refreshListboxTarefas(listaTarefas, lstTarefas):
     lstTarefas.delete(0, END)
     for item in listaTarefas:
-        item = item.replace(";", " ")
+        item = item.replace(";", "  ")
         lstTarefas.insert(END, item)
