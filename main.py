@@ -170,7 +170,8 @@ def login():
     Label(screen2,text = "").pack()
     Button(screen2, text = "Login", width = 10, height = 1,command = loginValidation).pack()
 
-def GerirTarefas():
+
+def PagTarefas():
     createDropCategory()
 
     windowTarefas = Toplevel()   # Objeto da classe Toplevel, janela principal
@@ -178,6 +179,7 @@ def GerirTarefas():
     windowTarefas.geometry("{:.0f}x{:.0f}+{:.0f}+{:.0f}" .format(appWidth, appHeight, int(x), int(y)))
     windowTarefas.focus_force()     # Força toda a interação com a janela atual (top window)
     windowTarefas.grab_set()
+    windowTarefas.config(bg = '#a3d9ff')
 
     userLabel = Label(windowTarefas, width = 5, height = 2, text = "")
     userLabel.place(x= 0, y=0)
@@ -192,10 +194,10 @@ def GerirTarefas():
     btnAdicionarTarefa.place(x=350, y=0)
 
     #Canvas com botões da esquerda
-    btnCanvas = Canvas(windowTarefas, width = 205, height = 455, bd = 2, bg='#a3d9ff', relief = "flat")
+    btnCanvas = Canvas(windowTarefas, width = 205, height = 455, bd = 2, bg='#7e6b8f', relief = "flat")
     btnCanvas.place(x=-5, y=40)
 
-    btnCriarTaref = Button(btnCanvas, width = 20, height= 5, text = "Criar Tarefa", bd=1, fg='black', relief = "raised", command=GerirTarefas)
+    btnCriarTaref = Button(btnCanvas, width = 20, height= 5, text = "Criar Tarefa", bd=1, fg='black', relief = "raised", command=PagTarefas)
     btnCriarTaref.place(x=40, y=50)
 
     btnPesquisa = Button(btnCanvas, width = 20, height= 5, text = "Pesquisa", bd=1, fg='black', relief = "raised")
@@ -207,6 +209,7 @@ def GerirTarefas():
     btnGerirCat = Button(btnCanvas, width = 20, height= 5, text = "Gerir Categorias", bd=1, fg='black', relief = "raised")
     btnGerirCat.place(x=40, y=350)
 
+    #Gerir Tarefas
     lblTarefa = Label(windowTarefas, text = "Tarefa")
     lblTarefa.place(x=220, y=70)
 
@@ -225,20 +228,23 @@ def GerirTarefas():
     categoria.set("Estudos")
     dropCategoria = OptionMenu(windowTarefas, categoria ,*options)
     dropCategoria.pack()
-    dropCategoria.place(x=270, y= 180)
+    dropCategoria.place(x=230, y= 180)
 
     lblCategoria = Label(windowTarefas, text = " ")
-    lblCategoria.place(x=270, y= 170)
+    lblCategoria.place(x=230, y= 180)
     lblCategoria.pack()
+
+    lblEstado = Label(windowTarefas, text = "Tarefa")
+    lblEstado.place(x=350, y=170)
 
     estadoTarefa = StringVar()
     estadoTarefa.set("Por fazer")
     rd1 = Radiobutton(windowTarefas, text = "Por fazer", value = "Por fazer", variable= estadoTarefa)
     rd2 = Radiobutton(windowTarefas, text = "A fazer", value = "A fazer",     variable= estadoTarefa)
     rd3 = Radiobutton(windowTarefas, text = "Feito", value = "Feito",         variable= estadoTarefa)
-    rd1.place(x= 270, y= 220)
-    rd2.place(x= 270, y= 250)
-    rd3.place(x= 270, y= 280)
+    rd1.place(x= 350, y= 200)
+    rd2.place(x= 350, y= 230)
+    rd3.place(x= 350, y= 260)
 
     lstTarefas = Listbox(windowTarefas, width = 50, height=12)
     lstTarefas.place(x= 470, y=70)
@@ -248,11 +254,59 @@ def GerirTarefas():
 
     btnInserir = Button(windowTarefas, text='Inserir', width=10, height=3, 
         command= lambda: inserirTarefa(tarefa.get(), data.get(), categoria.get(), estadoTarefa.get(), lstTarefas))
-    btnInserir.place(x=400, y= 350)
+    btnInserir.place(x=510, y= 300)
     
     btnRemover = Button(windowTarefas, text='Remover', width=10, height=3, 
         command= lambda: inserirTarefa(tarefa.get(), data.get(), categoria.get(), estadoTarefa.get()))
-    btnRemover.place(x=550, y= 350)
+    btnRemover.place(x=660, y= 300)
+
+    btnEstado = Button(windowTarefas, text='Mudar Estado', width=10, height=3, 
+        command= lambda: inserirTarefa(tarefa.get(), data.get(), categoria.get(), estadoTarefa.get()))
+    btnEstado.place(x=510, y= 400)
+
+def PagPesquisa():
+    windowPesquisa = Toplevel()
+    windowPesquisa.title("Criar Tarefas") 
+    windowPesquisa.geometry("{:.0f}x{:.0f}+{:.0f}+{:.0f}" .format(appWidth, appHeight, int(x), int(y)))
+    windowPesquisa.focus_force()
+    windowPesquisa.grab_set()
+    windowPesquisa.config(bg = '#a3d9ff')
+
+    userLabel = Label(windowPesquisa, width = 5, height = 2, text = "")
+    userLabel.place(x= 0, y=0)
+
+    btnInciarSessao = Button(windowPesquisa, width = 20, height= 2, text = "Iniciar Sessões", bd=1, fg='black', relief = "raised",command = login)
+    btnInciarSessao.place(x=500, y=0)
+
+    btnCriarConta = Button(windowPesquisa, width = 20, height= 2, text = "Criar Conta", bd=1, fg='black', relief = "raised",command = register)
+    btnCriarConta.place(x=650, y=0)
+
+    btnAdicionarTarefa = Button(windowPesquisa, width = 20, height= 2, text= "Adicionar tarefa", bd=1, fg='black', relief = "raised", command=addTask)
+    btnAdicionarTarefa.place(x=350, y=0)
+
+    #Canvas com botões da esquerda
+    btnCanvas = Canvas(windowPesquisa, width = 205, height = 455, bd = 2, bg='#7e6b8f', relief = "flat")
+    btnCanvas.place(x=-5, y=40)
+
+    btnCriarTaref = Button(btnCanvas, width = 20, height= 5, text = "Criar Tarefa", bd=1, fg='black', relief = "raised", command=PagTarefas)
+    btnCriarTaref.place(x=40, y=50)
+
+    btnPesquisa = Button(btnCanvas, width = 20, height= 5, text = "Pesquisa", bd=1, fg='black', relief = "raised", command=PagPesquisa)
+    btnPesquisa.place(x=40, y=150)
+
+    btnDashboard = Button(btnCanvas, width = 20, height= 5, text = "Área Pessoal", bd=1, fg='black', relief = "raised")
+    btnDashboard.place(x=40, y=250)
+
+    btnGerirCat = Button(btnCanvas, width = 20, height= 5, text = "Gerir Categorias", bd=1, fg='black', relief = "raised")
+    btnGerirCat.place(x=40, y=350)
+
+    #Pesquisa
+    lblPesquisa = Label(windowPesquisa, text = "Pesquisar:")
+    lblPesquisa.place(x=270, y=70)
+
+    pesquisa = StringVar()
+    inputPesquisa = Entry(windowPesquisa, width=40, textvariable=pesquisa)
+    inputPesquisa.place(x=330, y= 70)
 
 #-----------------------------------MainScreen----------------------------#
 
@@ -273,6 +327,7 @@ window.geometry("{:.0f}x{:.0f}+{:.0f}+{:.0f}" .format(appWidth, appHeight, int(x
 # btnNotificacao = Button(window, width = 30, height= 30, bd=1, image = imgNot, compound=LEFT, relief = "raised")
 # btnNotificacao.place(x=450, y=0)
 
+# MainPage
 userLabel = Label(window, width = 5, height = 2, text = "", bg='#a3d9ff', fg='#96e6b3')
 userLabel.place(x= 0, y=0)
 
@@ -289,10 +344,10 @@ btnAdicionarTarefa.place(x=350, y=0)
 btnCanvas = Canvas(window, width = 205, height = 455, bg='#7e6b8f', bd=0, relief = "flat")
 btnCanvas.place(x=-5, y=40)
 
-btnCriarTaref = Button(btnCanvas, width = 20, height= 5, text = "Criar Tarefa", bd=1, fg='black', relief = "raised", command=GerirTarefas)
+btnCriarTaref = Button(btnCanvas, width = 20, height= 5, text = "Criar Tarefa", bd=1, fg='black', relief = "raised", command=PagTarefas)
 btnCriarTaref.place(x=40, y=50)
 
-btnPesquisa = Button(btnCanvas, width = 20, height= 5, text = "Pesquisa", bd=1, fg='black', relief = "raised")
+btnPesquisa = Button(btnCanvas, width = 20, height= 5, text = "Pesquisa", bd=1, fg='black', relief = "raised", command=PagPesquisa)
 btnPesquisa.place(x=40, y=150)
 
 btnDashboard = Button(btnCanvas, width = 20, height= 5, text = "Área Pessoal", bd=1, fg='black', relief = "raised")
