@@ -330,6 +330,71 @@ def PagPesquisa():
     lstTarefas = Listbox(windowPesquisa, width = 50, height=12)
     lstTarefas.place(x= 470, y=70)
 
+def PagDashboard():
+    windowDashboard = Toplevel()
+    windowDashboard.title("Criar Tarefas") 
+    windowDashboard.geometry("{:.0f}x{:.0f}+{:.0f}+{:.0f}" .format(appWidth, appHeight, int(x), int(y)))
+    windowDashboard.focus_force()
+    windowDashboard.grab_set()
+    windowDashboard.config(bg = '#a3d9ff')
+
+    userLabel = Label(windowDashboard, width = 5, height = 2, text = "", bg='#a3d9ff', fg="black")
+    userLabel.place(x= 0, y=0)
+
+    btnInciarSessao = Button(windowDashboard, width = 20, height= 2, text = "Iniciar Sessões", bd=1,fg='white', bg='#006BB8', relief = "raised",command = login)
+    btnInciarSessao.place(x=500, y=0)
+
+    btnCriarConta = Button(windowDashboard, width = 20, height= 2, text = "Criar Conta", bd=1, fg='white', bg='#006BB8', relief = "raised",command = register)
+    btnCriarConta.place(x=650, y=0)
+
+    #Canvas com botões da esquerda
+    btnCanvas = Canvas(windowDashboard, width = 200, height = 460, bg='#7e6b8f', bd=0, relief = "flat")
+    btnCanvas.place(x=-5, y=40)
+
+    btnCriarTaref = Button(btnCanvas, width = 20, height= 5, text = "Criar Tarefa", bd=1, fg='white', bg='#006BB8', relief = "raised", command=PagTarefas)
+    btnCriarTaref.place(x=30, y=50)
+
+    btnPesquisa = Button(btnCanvas, width = 20, height= 5, text = "Pesquisa", bd=1, fg='white', bg='#006BB8', relief = "raised")
+    btnPesquisa.place(x=30, y=150)
+
+    btnDashboard = Button(btnCanvas, width = 20, height= 5, text = "Área Pessoal", bd=1, fg='white', bg='#006BB8', relief = "raised")
+    btnDashboard.place(x=30, y=250)
+
+    btnGerirCat = Button(btnCanvas, width = 20, height= 5, text = "Gerir Categorias", bd=1, fg='white', bg='#006BB8', relief = "raised")
+    btnGerirCat.place(x=30, y=350)
+
+def PagGerir():
+    windowGerir = Toplevel()
+    windowGerir.title("Criar Tarefas") 
+    windowGerir.geometry("{:.0f}x{:.0f}+{:.0f}+{:.0f}" .format(appWidth, appHeight, int(x), int(y)))
+    windowGerir.focus_force()
+    windowGerir.grab_set()
+    windowGerir.config(bg = '#a3d9ff')
+
+    userLabel = Label(windowGerir, width = 5, height = 2, text = "", bg='#a3d9ff', fg="black")
+    userLabel.place(x= 0, y=0)
+
+    btnInciarSessao = Button(windowGerir, width = 20, height= 2, text = "Iniciar Sessões", bd=1,fg='white', bg='#006BB8', relief = "raised",command = login)
+    btnInciarSessao.place(x=500, y=0)
+
+    btnCriarConta = Button(windowGerir, width = 20, height= 2, text = "Criar Conta", bd=1, fg='white', bg='#006BB8', relief = "raised",command = register)
+    btnCriarConta.place(x=650, y=0)
+
+    #Canvas com botões da esquerda
+    btnCanvas = Canvas(windowGerir, width = 200, height = 460, bg='#7e6b8f', bd=0, relief = "flat")
+    btnCanvas.place(x=-5, y=40)
+
+    btnCriarTaref = Button(btnCanvas, width = 20, height= 5, text = "Criar Tarefa", bd=1, fg='white', bg='#006BB8', relief = "raised", command=PagTarefas)
+    btnCriarTaref.place(x=30, y=50)
+
+    btnPesquisa = Button(btnCanvas, width = 20, height= 5, text = "Pesquisa", bd=1, fg='white', bg='#006BB8', relief = "raised")
+    btnPesquisa.place(x=30, y=150)
+
+    btnDashboard = Button(btnCanvas, width = 20, height= 5, text = "Área Pessoal", bd=1, fg='white', bg='#006BB8', relief = "raised")
+    btnDashboard.place(x=30, y=250)
+
+    btnGerirCat = Button(btnCanvas, width = 20, height= 5, text = "Gerir Categorias", bd=1, fg='white', bg='#006BB8', relief = "raised")
+    btnGerirCat.place(x=30, y=350)
 
 #-----------------------------------MainScreen----------------------------#
 
@@ -369,10 +434,10 @@ btnCriarTaref.place(x=30, y=50)
 btnPesquisa = Button(btnCanvas, width = 20, height= 5, text = "Pesquisa", bd=1, fg='white', bg='#006BB8', relief = "raised", command=PagPesquisa)
 btnPesquisa.place(x=30, y=150)
 
-btnDashboard = Button(btnCanvas, width = 20, height= 5, text = "Área Pessoal", bd=1, fg='white', bg='#006BB8', relief = "raised")
+btnDashboard = Button(btnCanvas, width = 20, height= 5, text = "Área Pessoal", bd=1, fg='white', bg='#006BB8', relief = "raised", command=PagDashboard)
 btnDashboard.place(x=30, y=250)
 
-btnGerirCat = Button(btnCanvas, width = 20, height= 5, text = "Gerir Categorias", bd=1, fg='white', bg='#006BB8', relief = "raised")
+btnGerirCat = Button(btnCanvas, width = 20, height= 5, text = "Gerir", bd=1, fg='white', bg='#006BB8', relief = "raised", command=PagGerir)
 btnGerirCat.place(x=30, y=350)
 
 ImgCanvas = Canvas(window, width = 600, height = 455, bd=0, bg='#a3d9ff', relief = "flat")
