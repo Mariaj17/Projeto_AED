@@ -34,8 +34,8 @@ def init():
     except FileNotFoundError:
         with open("Files/users.txt", "w") as file:
             file.write(
-                "totalActivities" + ";" +
-                "currentActivities" + ";" +
+                "0" + ";" +
+                "0" + ";" +
                 "admin" + ";" +
                 "123" + ";" +
                 "False" + ";" +
@@ -200,10 +200,10 @@ def PagTarefas():
     btnPesquisa = Button(btnCanvas, width = 20, height= 5, text = "Pesquisa", bd=1, fg='white', bg='#006BB8', relief = "raised", command=PagPesquisa)
     btnPesquisa.place(x=40, y=150)
 
-    btnDashboard = Button(btnCanvas, width = 20, height= 5, text = "Área Pessoal", bd=1, fg='white', bg='#006BB8', relief = "raised")
+    btnDashboard = Button(btnCanvas, width = 20, height= 5, text = "Área Pessoal", bd=1, fg='white', bg='#006BB8', relief = "raised", command=PagDashboard)
     btnDashboard.place(x=40, y=250)
 
-    btnGerirCat = Button(btnCanvas, width = 20, height= 5, text = "Gerir", bd=1, fg='white', bg='#006BB8', relief = "raised")
+    btnGerirCat = Button(btnCanvas, width = 20, height= 5, text = "Gerir", bd=1, fg='white', bg='#006BB8', relief = "raised", command=PagGerir)
     btnGerirCat.place(x=40, y=350)
 
     #Gerir Tarefas
@@ -291,10 +291,10 @@ def PagPesquisa():
     btnPesquisa = Button(btnCanvas, width = 20, height= 5, text = "Pesquisa", bd=1, fg='white', bg='#006BB8', relief = "raised")
     btnPesquisa.place(x=30, y=150)
 
-    btnDashboard = Button(btnCanvas, width = 20, height= 5, text = "Área Pessoal", bd=1, fg='white', bg='#006BB8', relief = "raised")
+    btnDashboard = Button(btnCanvas, width = 20, height= 5, text = "Área Pessoal", bd=1, fg='white', bg='#006BB8', relief = "raised", command=PagDashboard)
     btnDashboard.place(x=30, y=250)
 
-    btnGerirCat = Button(btnCanvas, width = 20, height= 5, text = "Gerir", bd=1, fg='white', bg='#006BB8', relief = "raised")
+    btnGerirCat = Button(btnCanvas, width = 20, height= 5, text = "Gerir", bd=1, fg='white', bg='#006BB8', relief = "raised", command=PagGerir)
     btnGerirCat.place(x=30, y=350)
 
     #Pesquisa
@@ -354,13 +354,13 @@ def PagDashboard():
     btnCriarTaref = Button(btnCanvas, width = 20, height= 5, text = "Criar Tarefa", bd=1, fg='white', bg='#006BB8', relief = "raised", command=PagTarefas)
     btnCriarTaref.place(x=30, y=50)
 
-    btnPesquisa = Button(btnCanvas, width = 20, height= 5, text = "Pesquisa", bd=1, fg='white', bg='#006BB8', relief = "raised")
+    btnPesquisa = Button(btnCanvas, width = 20, height= 5, text = "Pesquisa", bd=1, fg='white', bg='#006BB8', relief = "raised", command=PagPesquisa)
     btnPesquisa.place(x=30, y=150)
 
     btnDashboard = Button(btnCanvas, width = 20, height= 5, text = "Área Pessoal", bd=1, fg='white', bg='#006BB8', relief = "raised")
     btnDashboard.place(x=30, y=250)
 
-    btnGerirCat = Button(btnCanvas, width = 20, height= 5, text = "Gerir", bd=1, fg='white', bg='#006BB8', relief = "raised")
+    btnGerirCat = Button(btnCanvas, width = 20, height= 5, text = "Gerir", bd=1, fg='white', bg='#006BB8', relief = "raised", command=PagGerir)
     btnGerirCat.place(x=30, y=350)
 
 def PagGerir():
@@ -387,10 +387,10 @@ def PagGerir():
     btnCriarTaref = Button(btnCanvas, width = 20, height= 5, text = "Criar Tarefa", bd=1, fg='white', bg='#006BB8', relief = "raised", command=PagTarefas)
     btnCriarTaref.place(x=30, y=50)
 
-    btnPesquisa = Button(btnCanvas, width = 20, height= 5, text = "Pesquisa", bd=1, fg='white', bg='#006BB8', relief = "raised")
+    btnPesquisa = Button(btnCanvas, width = 20, height= 5, text = "Pesquisa", bd=1, fg='white', bg='#006BB8', relief = "raised", command=PagPesquisa)
     btnPesquisa.place(x=30, y=150)
 
-    btnDashboard = Button(btnCanvas, width = 20, height= 5, text = "Área Pessoal", bd=1, fg='white', bg='#006BB8', relief = "raised")
+    btnDashboard = Button(btnCanvas, width = 20, height= 5, text = "Área Pessoal", bd=1, fg='white', bg='#006BB8', relief = "raised", command=PagDashboard)
     btnDashboard.place(x=30, y=250)
 
     btnGerirCat = Button(btnCanvas, width = 20, height= 5, text = "Gerir", bd=1, fg='white', bg='#006BB8', relief = "raised")

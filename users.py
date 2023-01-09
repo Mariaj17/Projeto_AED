@@ -43,8 +43,8 @@ def saveUser():
 
     with open("Files/users.txt", "a") as file:
         file.write(
-                "totalActivities" + ";" +
-                "currentActivities" + ";" +
+                "0" + ";" +
+                "0" + ";" +
                 usernameInfo + ";" +
                 passwordInfo + ";" +
                 "False" + ";" +
@@ -150,7 +150,7 @@ def taskValidation():
             
             userList[index] = userList[index].replace(userList[index].split(";")[1], str(currentActivities))
             file.writelines(userList)
-            messagebox.showinfo("Task sent!", f"The task you selected for {userChosen.get()} will be going his way!")
+            messagebox.showinfo("Task sent!", f"The task you selected for {userChosen.get()} will be going their way!")
             screen3.destroy()
         
         print(userList[index].split(";")[1])
