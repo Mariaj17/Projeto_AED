@@ -203,7 +203,7 @@ def PagTarefas():
     btnDashboard = Button(btnCanvas, width = 20, height= 5, text = "Área Pessoal", bd=1, fg='white', bg='#006BB8', relief = "raised")
     btnDashboard.place(x=40, y=250)
 
-    btnGerirCat = Button(btnCanvas, width = 20, height= 5, text = "Gerir Categorias", bd=1, fg='white', bg='#006BB8', relief = "raised")
+    btnGerirCat = Button(btnCanvas, width = 20, height= 5, text = "Gerir", bd=1, fg='white', bg='#006BB8', relief = "raised")
     btnGerirCat.place(x=40, y=350)
 
     #Gerir Tarefas
@@ -294,7 +294,7 @@ def PagPesquisa():
     btnDashboard = Button(btnCanvas, width = 20, height= 5, text = "Área Pessoal", bd=1, fg='white', bg='#006BB8', relief = "raised")
     btnDashboard.place(x=30, y=250)
 
-    btnGerirCat = Button(btnCanvas, width = 20, height= 5, text = "Gerir Categorias", bd=1, fg='white', bg='#006BB8', relief = "raised")
+    btnGerirCat = Button(btnCanvas, width = 20, height= 5, text = "Gerir", bd=1, fg='white', bg='#006BB8', relief = "raised")
     btnGerirCat.place(x=30, y=350)
 
     #Pesquisa
@@ -360,7 +360,7 @@ def PagDashboard():
     btnDashboard = Button(btnCanvas, width = 20, height= 5, text = "Área Pessoal", bd=1, fg='white', bg='#006BB8', relief = "raised")
     btnDashboard.place(x=30, y=250)
 
-    btnGerirCat = Button(btnCanvas, width = 20, height= 5, text = "Gerir Categorias", bd=1, fg='white', bg='#006BB8', relief = "raised")
+    btnGerirCat = Button(btnCanvas, width = 20, height= 5, text = "Gerir", bd=1, fg='white', bg='#006BB8', relief = "raised")
     btnGerirCat.place(x=30, y=350)
 
 def PagGerir():
@@ -393,7 +393,7 @@ def PagGerir():
     btnDashboard = Button(btnCanvas, width = 20, height= 5, text = "Área Pessoal", bd=1, fg='white', bg='#006BB8', relief = "raised")
     btnDashboard.place(x=30, y=250)
 
-    btnGerirCat = Button(btnCanvas, width = 20, height= 5, text = "Gerir Categorias", bd=1, fg='white', bg='#006BB8', relief = "raised")
+    btnGerirCat = Button(btnCanvas, width = 20, height= 5, text = "Gerir", bd=1, fg='white', bg='#006BB8', relief = "raised")
     btnGerirCat.place(x=30, y=350)
 
 #-----------------------------------MainScreen----------------------------#
