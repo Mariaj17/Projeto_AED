@@ -253,7 +253,7 @@ def PagTarefas():
         command= lambda: inserirTarefa(tarefa.get(), data.get(), categoria.get(), estadoTarefa.get(), lstTarefas))
     btnInserir.place(x=510, y= 300)
     
-    btnRemover = Button(windowTarefas, text='Remover', width=10, height=3, bd=1, fg='white', bg='#006BB8', relief = "raised", command= removeTarefas)
+    btnRemover = Button(windowTarefas, text='Remover', width=10, height=3, bd=1, fg='white', bg='#006BB8', relief = "raised")
     btnRemover.place(x=660, y= 300)
 
     btnEstado = Button(windowTarefas, text='Mudar Estado', width=10, height=3, bd=1, fg='white', bg='#006BB8', relief = "raised")
