@@ -190,17 +190,14 @@ def PagTarefas():
     btnCriarConta = Button(windowTarefas, width = 20, height= 2, text = "Criar Conta", bd=1, fg='white', bg='#006BB8', relief = "raised",command = register)
     btnCriarConta.place(x=650, y=0)
 
-    btnAdicionarTarefa = Button(windowTarefas, width = 20, height= 2, text= "Adicionar tarefa", bd=1, fg='white', bg='#006BB8', relief = "raised", command=addTask)
-    btnAdicionarTarefa.place(x=350, y=0)
-
     #Canvas com botões da esquerda
     btnCanvas = Canvas(windowTarefas, width = 205, height = 455, bd = 2, bg='#7e6b8f', relief = "flat")
     btnCanvas.place(x=-5, y=40)
 
-    btnCriarTaref = Button(btnCanvas, width = 20, height= 5, text = "Criar Tarefa", bd=1, fg='white', bg='#006BB8', relief = "raised", command=PagTarefas)
+    btnCriarTaref = Button(btnCanvas, width = 20, height= 5, text = "Criar Tarefa", bd=1, fg='white', bg='#006BB8', relief = "raised")
     btnCriarTaref.place(x=40, y=50)
 
-    btnPesquisa = Button(btnCanvas, width = 20, height= 5, text = "Pesquisa", bd=1, fg='white', bg='#006BB8', relief = "raised")
+    btnPesquisa = Button(btnCanvas, width = 20, height= 5, text = "Pesquisa", bd=1, fg='white', bg='#006BB8', relief = "raised", command=PagPesquisa)
     btnPesquisa.place(x=40, y=150)
 
     btnDashboard = Button(btnCanvas, width = 20, height= 5, text = "Área Pessoal", bd=1, fg='white', bg='#006BB8', relief = "raised")
@@ -210,14 +207,14 @@ def PagTarefas():
     btnGerirCat.place(x=40, y=350)
 
     #Gerir Tarefas
-    lblTarefa = Label(windowTarefas, text = "Tarefa")
+    lblTarefa = Label(windowTarefas, text = "Tarefa", bg='#a3d9ff')
     lblTarefa.place(x=220, y=70)
 
     tarefa = StringVar()
     inputTarefa = Entry(windowTarefas, width=25, textvariable=tarefa)
     inputTarefa.place(x=270, y= 70) 
 
-    lblData = Label(windowTarefas, text = "Data")
+    lblData = Label(windowTarefas, text = "Data", bg='#a3d9ff')
     lblData.place(x=220, y=120)
 
     data = StringVar()
@@ -226,22 +223,22 @@ def PagTarefas():
 
     categoria = StringVar()                     
     categoria.set("Estudos")
-    dropCategoria = OptionMenu(windowTarefas, categoria ,*options)
+    dropCategoria = OptionMenu(windowTarefas, categoria ,*options, bg='#a3d9ff')
     dropCategoria.pack()
     dropCategoria.place(x=230, y= 180)
 
-    lblCategoria = Label(windowTarefas, text = " ")
+    lblCategoria = Label(windowTarefas, text = " ", bg='#a3d9ff')
     lblCategoria.place(x=230, y= 180)
     lblCategoria.pack()
 
-    lblEstado = Label(windowTarefas, text = "Tarefa")
+    lblEstado = Label(windowTarefas, text = "Tarefa", bg='#a3d9ff')
     lblEstado.place(x=350, y=170)
 
     estadoTarefa = StringVar()
     estadoTarefa.set("Por fazer")
-    rd1 = Radiobutton(windowTarefas, text = "Por fazer", value = "Por fazer", variable= estadoTarefa)
-    rd2 = Radiobutton(windowTarefas, text = "A fazer", value = "A fazer",     variable= estadoTarefa)
-    rd3 = Radiobutton(windowTarefas, text = "Feito", value = "Feito",         variable= estadoTarefa)
+    rd1 = Radiobutton(windowTarefas, text = "Por fazer", value = "Por fazer", variable= estadoTarefa, bg='#a3d9ff')
+    rd2 = Radiobutton(windowTarefas, text = "A fazer", value = "A fazer",     variable= estadoTarefa, bg='#a3d9ff')
+    rd3 = Radiobutton(windowTarefas, text = "Feito", value = "Feito",         variable= estadoTarefa, bg='#a3d9ff')
     rd1.place(x= 350, y= 200)
     rd2.place(x= 350, y= 230)
     rd3.place(x= 350, y= 260)
@@ -252,16 +249,18 @@ def PagTarefas():
     listaTarefas= lerTarefas()
     refreshListboxTarefas(listaTarefas, lstTarefas)
 
-    btnInserir = Button(windowTarefas, text='Inserir', width=10, height=3, 
+    btnInserir = Button(windowTarefas, text='Inserir', width=10, height=3, bd=1, fg='white', bg='#006BB8', relief = "raised", 
         command= lambda: inserirTarefa(tarefa.get(), data.get(), categoria.get(), estadoTarefa.get(), lstTarefas))
     btnInserir.place(x=510, y= 300)
     
-    btnRemover = Button(windowTarefas, text='Remover', width=10, height=3, command= removeTarefas)
+    btnRemover = Button(windowTarefas, text='Remover', width=10, height=3, bd=1, fg='white', bg='#006BB8', relief = "raised", command= removeTarefas)
     btnRemover.place(x=660, y= 300)
 
-    btnEstado = Button(windowTarefas, text='Mudar Estado', width=10, height=3, 
-        command= lambda: inserirTarefa(tarefa.get(), data.get(), categoria.get(), estadoTarefa.get()))
+    btnEstado = Button(windowTarefas, text='Mudar Estado', width=10, height=3, bd=1, fg='white', bg='#006BB8', relief = "raised")
     btnEstado.place(x=510, y= 400)
+
+    btnAdicionarTarefa = Button(windowTarefas, width = 10, height= 3, text= "Redirecionar", bd=1, fg='white', bg='#006BB8', relief = "raised", command=addTask)
+    btnAdicionarTarefa.place(x=660, y=400)
 
 def PagPesquisa():
     windowPesquisa = Toplevel()
@@ -280,9 +279,6 @@ def PagPesquisa():
     btnCriarConta = Button(windowPesquisa, width = 20, height= 2, text = "Criar Conta", bd=1, fg='white', bg='#006BB8', relief = "raised",command = register)
     btnCriarConta.place(x=650, y=0)
 
-    btnAdicionarTarefa = Button(windowPesquisa, width = 20, height= 2, text= "Adicionar tarefa", bd=1, fg='white', bg='#006BB8', relief = "raised", command=addTask)
-    btnAdicionarTarefa.place(x=350, y=0)
-
     #Canvas com botões da esquerda
     btnCanvas = Canvas(windowPesquisa, width = 200, height = 460, bg='#7e6b8f', bd=0, relief = "flat")
     btnCanvas.place(x=-5, y=40)
@@ -290,7 +286,7 @@ def PagPesquisa():
     btnCriarTaref = Button(btnCanvas, width = 20, height= 5, text = "Criar Tarefa", bd=1, fg='white', bg='#006BB8', relief = "raised", command=PagTarefas)
     btnCriarTaref.place(x=30, y=50)
 
-    btnPesquisa = Button(btnCanvas, width = 20, height= 5, text = "Pesquisa", state='disabled', bd=1, fg='white', bg='#006BB8', command=PagPesquisa)
+    btnPesquisa = Button(btnCanvas, width = 20, height= 5, text = "Pesquisa", bd=1, fg='white', bg='#006BB8', relief = "raised")
     btnPesquisa.place(x=30, y=150)
 
     btnDashboard = Button(btnCanvas, width = 20, height= 5, text = "Área Pessoal", bd=1, fg='white', bg='#006BB8', relief = "raised")
@@ -300,12 +296,25 @@ def PagPesquisa():
     btnGerirCat.place(x=30, y=350)
 
     #Pesquisa
-    lblPesquisa = Label(windowPesquisa, text = "Pesquisar:", bg='#a3d9ff', font = ("Helvetica", "10"), fg='black')
+    lblPesquisa = Label(windowPesquisa, text = "Pesquisar por data:", bg='#a3d9ff', fg='black')
     lblPesquisa.place(x=270, y=70)
 
     pesquisa = StringVar()
-    inputPesquisa = Entry(windowPesquisa, width=40, textvariable=pesquisa)
+    inputPesquisa = Entry(windowPesquisa, width=20, textvariable=pesquisa)
     inputPesquisa.place(x=330, y= 70)
+
+    lblEstado = Label(windowPesquisa, text = "Tarefa")
+    lblEstado.place(x=350, y=170)
+
+    estadoTarefa = StringVar()
+    estadoTarefa.set("Por fazer")
+    rd1 = Radiobutton(windowPesquisa, text = "Por fazer", value = "Por fazer", variable= estadoTarefa)
+    rd2 = Radiobutton(windowPesquisa, text = "A fazer", value = "A fazer",     variable= estadoTarefa)
+    rd3 = Radiobutton(windowPesquisa, text = "Feito", value = "Feito",         variable= estadoTarefa)
+    rd1.place(x= 350, y= 200)
+    rd2.place(x= 350, y= 230)
+    rd3.place(x= 350, y= 260)
+
 
 #-----------------------------------MainScreen----------------------------#
 
