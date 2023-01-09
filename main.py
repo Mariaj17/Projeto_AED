@@ -223,15 +223,15 @@ def PagTarefas():
 
     categoria = StringVar()                     
     categoria.set("Estudos")
-    dropCategoria = OptionMenu(windowTarefas, categoria ,*options, bg='#a3d9ff')
+    dropCategoria = OptionMenu(windowTarefas, categoria ,*options)
     dropCategoria.pack()
     dropCategoria.place(x=230, y= 180)
 
-    lblCategoria = Label(windowTarefas, text = " ", bg='#a3d9ff')
+    lblCategoria = Label(windowTarefas, text = " ")
     lblCategoria.place(x=230, y= 180)
     lblCategoria.pack()
 
-    lblEstado = Label(windowTarefas, text = "Tarefa", bg='#a3d9ff')
+    lblEstado = Label(windowTarefas, text = "Estado:", bg='#a3d9ff')
     lblEstado.place(x=350, y=170)
 
     estadoTarefa = StringVar()
@@ -263,6 +263,8 @@ def PagTarefas():
     btnAdicionarTarefa.place(x=660, y=400)
 
 def PagPesquisa():
+    createDropCategory()
+
     windowPesquisa = Toplevel()
     windowPesquisa.title("Criar Tarefas") 
     windowPesquisa.geometry("{:.0f}x{:.0f}+{:.0f}+{:.0f}" .format(appWidth, appHeight, int(x), int(y)))
@@ -297,23 +299,36 @@ def PagPesquisa():
 
     #Pesquisa
     lblPesquisa = Label(windowPesquisa, text = "Pesquisar por data:", bg='#a3d9ff', fg='black')
-    lblPesquisa.place(x=270, y=70)
+    lblPesquisa.place(x=210, y=70)
 
     pesquisa = StringVar()
     inputPesquisa = Entry(windowPesquisa, width=20, textvariable=pesquisa)
     inputPesquisa.place(x=330, y= 70)
 
-    lblEstado = Label(windowPesquisa, text = "Tarefa")
-    lblEstado.place(x=350, y=170)
+    lblEstado = Label(windowPesquisa, text = "Estado", bg='#a3d9ff')
+    lblEstado.place(x=210, y=120)
 
     estadoTarefa = StringVar()
     estadoTarefa.set("Por fazer")
-    rd1 = Radiobutton(windowPesquisa, text = "Por fazer", value = "Por fazer", variable= estadoTarefa)
-    rd2 = Radiobutton(windowPesquisa, text = "A fazer", value = "A fazer",     variable= estadoTarefa)
-    rd3 = Radiobutton(windowPesquisa, text = "Feito", value = "Feito",         variable= estadoTarefa)
-    rd1.place(x= 350, y= 200)
-    rd2.place(x= 350, y= 230)
-    rd3.place(x= 350, y= 260)
+    rd1 = Radiobutton(windowPesquisa, text = "Por fazer", value = "Por fazer", variable= estadoTarefa, bg='#a3d9ff')
+    rd2 = Radiobutton(windowPesquisa, text = "A fazer", value = "A fazer",     variable= estadoTarefa, bg='#a3d9ff')
+    rd3 = Radiobutton(windowPesquisa, text = "Feito", value = "Feito",         variable= estadoTarefa, bg='#a3d9ff')
+    rd1.place(x= 210, y= 150)
+    rd2.place(x= 210, y= 180)
+    rd3.place(x= 210, y= 210)
+
+    categoria = StringVar()                     
+    categoria.set("Estudo")
+    dropCategoria = OptionMenu(windowPesquisa, categoria ,*options)
+    dropCategoria.pack()
+    dropCategoria.place(x=300, y= 120)
+
+    lblCategoria = Label(windowPesquisa, text = " ")
+    lblCategoria.place(x=300, y= 120)
+    lblCategoria.pack()
+
+    lstTarefas = Listbox(windowPesquisa, width = 50, height=12)
+    lstTarefas.place(x= 470, y=70)
 
 
 #-----------------------------------MainScreen----------------------------#
@@ -328,6 +343,7 @@ x = (screenWidth/2) - (appWidth/2)
 y = (screenHeight/2) - (appHeight/2)
 window.geometry("{:.0f}x{:.0f}+{:.0f}+{:.0f}" .format(appWidth, appHeight, int(x), int(y)))
 
+#img = ImageTk.PhotoImage(Image.open("img\homepage.jpg"))
 
 # #Botões de conta
 # btnNotificacao = Button(window, width = 30, height= 30, bd=1, image = imgNot, compound=LEFT, relief = "raised")
@@ -342,9 +358,6 @@ btnInciarSessao.place(x=500, y=0)
 
 btnCriarConta = Button(window, width = 20, height= 2, text = "Criar Conta", bd=1, fg='white', bg='#006BB8', relief = "raised",command = register)
 btnCriarConta.place(x=650, y=0)
-
-btnAdicionarTarefa = Button(window, width = 20, height= 2, text= "Adicionar tarefa", bd=1, fg='white', bg='#006BB8', relief = "raised", command=addTask)
-btnAdicionarTarefa.place(x=350, y=0)
 
 #Canvas com botões da esquerda
 btnCanvas = Canvas(window, width = 200, height = 460, bg='#7e6b8f', bd=0, relief = "flat")
