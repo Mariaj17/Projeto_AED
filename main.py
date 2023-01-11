@@ -173,6 +173,7 @@ def login():
 
 def PagTarefas():
     createDropCategory()
+    utils.checkUserLogged()
 
     windowTarefas = Toplevel()   # Objeto da classe Toplevel, janela principal
     windowTarefas.title("Criar Tarefas") 
@@ -252,6 +253,7 @@ def PagTarefas():
     btnInserir = Button(windowTarefas, text='Inserir', width=10, height=3, bd=1, fg='white', bg='#006BB8', relief = "raised", 
         command= lambda: inserirTarefa(tarefa.get(), data.get(), categoria.get(), estadoTarefa.get(), lstTarefas))
     btnInserir.place(x=510, y= 300)
+                                        #usernameLogged.get()
     
     btnRemover = Button(windowTarefas, text='Remover', width=10, height=3, bd=1, fg='white', bg='#006BB8', relief = "raised")
     btnRemover.place(x=660, y= 300)

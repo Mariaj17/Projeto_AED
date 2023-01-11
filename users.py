@@ -52,6 +52,7 @@ def saveUser():
                 "normal" + ";" +
                 "\n")
         messagebox.showinfo("Account was successfully!", "Your new account has been created!")
+        
 def validateReg():
 
         userRegValidate = username.get()
