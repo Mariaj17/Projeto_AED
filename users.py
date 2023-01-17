@@ -153,10 +153,6 @@ def taskValidation():
             file.writelines(userList)
             messagebox.showinfo("Task sent!", f"The task you selected for {userChosen.get()} will be going their way!")
             screen3.destroy()
-        
-        print(userList[index].split(";")[1])
-        print(currentActivities)
-        print(userList)      
 
 
 def sendTask():
