@@ -230,8 +230,8 @@ def addTaskElements():
                 taskCategoryDropdown.current(0)
 
 def addTask():
-    task_value = taskName.get()
-    category_value = taskCategoryDropdown.get()
+    taskValue = taskName.get()
+    categoryValue = taskCategoryDropdown.get()
     selectedDate = taskDate.get_date()
     if currentUser == []:
         messagebox.showerror("No user is logged in", "Please log in to add a task.")
@@ -242,15 +242,15 @@ def addTask():
         tasks = file.readlines()
         for i, line in enumerate(tasks):
             if currentUser[0] in line:
-                if task_value in line:
+                if taskValue in line:
                     messagebox.showerror("Task already exists", "The task you are trying to add already exists.")
                     return
-                tasks[i] = line.rstrip() + f";[{task_value},{selectedDate}]\n"
+                tasks[i] = line.rstrip() + f";[{taskValue},{selectedDate}]\n"
                 with open("Files/tasksNotDone.txt", "w") as file:
                     file.writelines(tasks)
                 return
     with open("Files/tasksNotDone.txt", "a") as file:
-        file.write(f"{currentUser[0]};{category_value};[{task_value},{selectedDate}]\n")
+        file.write(f"{currentUser[0]};{categoryValue};[{taskValue},{selectedDate}]\n")
 
 
 
@@ -273,6 +273,33 @@ def addSearchElements():
 def searchTask():
     searchValue = searchName.get()
     print(searchValue)
+#---------------------------------------- Personal Area------------------#
+def addPersonalElements():
+    global taskButtons
+    taskButtons = []
+    try:
+        cleanElements()
+    except:
+        pass
+    if currentUser == []:
+        messagebox.showerror("No user is logged", "To view this you need to be logged in and have an admin account!")
+        return
+    if os.path.exists("Files/tasksNotDone.txt"):
+        i = 1
+        with open("Files/tasksNotDone.txt", "r") as file:
+            for line in file:
+                userTask = line.strip().split(";")
+                if currentUser[0] == userTask[0]:
+                    task_list = userTask[2:]
+                    for j, task in enumerate(task_list):
+                        taskButton = Button(window, text=task[1:-1])
+                        taskButton.grid(row=i+j, column=1)
+                        taskButtons.append(taskButton)
+    else:
+        messagebox.showerror("No task", "There are no tasks")
+
+
+
 
 #-----------------------------------Admin Menu---------------------------#
 def addManageElements():
@@ -451,6 +478,8 @@ def addUser():
 #-----------------------------------Clean Tkinter elements------------------------#
     #esta função limpa os elementos tkinter de cada aba da pagina
 def cleanElements():
+    for button in taskButtons:
+        button.destroy()
     taskLabel.destroy()
     taskName.destroy()
     btnSubmitTask.destroy()
@@ -519,7 +548,7 @@ btnCriarTaref.place(x=30, y=50)
 btnPesquisa = Button(btnCanvas, width = 20, height= 5, text = "Pesquisa", bd=1, fg='white', bg='#006BB8', relief = "raised",command=addSearchElements )
 btnPesquisa.place(x=30, y=150)
 
-btnDashboard = Button(btnCanvas, width = 20, height= 5, text = "Área Pessoal", bd=1, fg='white', bg='#006BB8', relief = "raised", )
+btnDashboard = Button(btnCanvas, width = 20, height= 5, text = "Área Pessoal", bd=1, fg='white', bg='#006BB8', relief = "raised", command=addPersonalElements)
 btnDashboard.place(x=30, y=250)
 
 btnGerirCat = Button(btnCanvas, width = 20, height= 5, text = "Gerir", bd=1, fg='white', bg='#006BB8', relief = "raised", command=addManageElements)

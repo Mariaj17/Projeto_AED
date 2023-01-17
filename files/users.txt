@@ -1,2 +1,2 @@
-0;0;admin;123;False;admin@gmail.com;admin
+0;0;admin;123;True;admin@gmail.com;admin
 1;1;jose;aaaaaa;False;jose@gmail.com;normal;123
