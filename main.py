@@ -7,6 +7,8 @@ from users import *
 import utils
 from tarefas import *
 from categorias import *
+from tkcalendar import Calendar
+
 
 global window
 window=Tk()
@@ -192,26 +194,66 @@ def login():
 
 #-----------------------------------Criar Tarefa--------------------------#
 def addTaskElements():
-    global categoryName, btnSubmitCathegory, btnAddTask
+    global taskLabel, taskName, btnSubmitTask, btnAddTask, taskCategoryDropdown, taskCategoryLabel, taskDate
     try:
         cleanElements()
     except:
         pass
-    categoryName = Entry(window)
-    categoryName.grid(row=1, column=1)
+    taskLabel= Label(window, text="What task do you wish to add?", bg="#a3d9ff")
+    taskLabel.grid(row=1, column=1, padx=(10,10))
 
-    btnSubmitCathegory = Button(window, text="Submit", command=addTask)
-    btnSubmitCathegory.grid(row=2, column=1)
+    taskName = Entry(window)
+    taskName.grid(row=2, column=1,padx=(10,10))
 
-    btnAddTask = Button(window, width = 20, height= 5, text = "Criar Tarefa", bd=1, fg='white', bg='#006BB8', relief = "raised",command=sendTask)
-    btnAddTask.grid(row=1, column=3)
+    btnSubmitTask = Button(window, text="Submit", command=addTask)
+    btnSubmitTask.grid(row=3, column=1,padx=(10,10))
 
-    
+    taskCategoryLabel = Label(window, text="Select a Category", bg="#a3d9ff")
+    taskCategoryLabel.grid(row=1, column=2, padx=(10,10))
+
+    taskCategoryDropdown = ttk.Combobox(window)
+    taskCategoryDropdown.grid(row=2, column=2, padx=(10,10))
+
+    btnAddTask = Button(window, width = 20, height= 2, text = "Enviar Tarefa", bd=1, fg='white', bg='#006BB8', relief = "raised",command=sendTask)
+    btnAddTask.grid(row=1, column=3,padx=(10,10))
+
+
+    taskDate = Calendar(window, selectmode = "day",year=2022,month=1,date=1)
+    taskDate.grid(row=4, column=1, padx=(10,10))
+
+
+    if os.path.exists("Files/category.txt"):
+            with open("Files/category.txt", "r") as file:
+                categories = file.readlines()
+                    #list compreension que vai fazer com que cada valor do dropdown seja a lita formada pelas categorias do ficheiro --> equivalente a "for category in categories:  categoryDropdown['values'] = category.strip()"
+                taskCategoryDropdown['values'] = [category.strip() for category in categories]
+                taskCategoryDropdown.current(0)
 
 def addTask():
-    categoryValue = categoryName.get()
-    print(categoryValue)
-    cleanElements()
+    task_value = taskName.get()
+    category_value = taskCategoryDropdown.get()
+    selectedDate = taskDate.get_date()
+    if currentUser == []:
+        messagebox.showerror("No user is logged in", "Please log in to add a task.")
+        return
+    if not os.path.exists("Files/tasksNotDone.txt"):
+        open("Files/tasksNotDone.txt", "w").close()
+    with open("Files/tasksNotDone.txt", "r") as file:
+        tasks = file.readlines()
+        for i, line in enumerate(tasks):
+            if currentUser[0] in line:
+                if task_value in line:
+                    messagebox.showerror("Task already exists", "The task you are trying to add already exists.")
+                    return
+                tasks[i] = line.rstrip() + f";[{task_value},{selectedDate}]\n"
+                with open("Files/tasksNotDone.txt", "w") as file:
+                    file.writelines(tasks)
+                return
+    with open("Files/tasksNotDone.txt", "a") as file:
+        file.write(f"{currentUser[0]};{category_value};[{task_value},{selectedDate}]\n")
+
+
+
 
 
 #-----------------------------------pesquisa------------------------------#
@@ -236,7 +278,7 @@ def searchTask():
 def addManageElements():
     global categoryLabel, categoryEntry, btnAddCategory, categoryBoxLabel, categoryDropdown, btnRemoveCategory, userLabel, userDropdown, btnRemoveUser, addUserLabel, usernameLabel, usernameEntry, passwordLabel, passwordEntry, emailLabel, emailEntry, userTypeLabel, userType, adminAddBtn
     if currentUser == []:
-        messagebox.showerror("No user is logged", "To view this you need to be logged in with an admin account!")
+        messagebox.showerror("No user is logged", "To view this you need to be logged in and have an admin account!")
     elif currentUser[1] == "admin":
         try:
             cleanElements()
@@ -409,8 +451,12 @@ def addUser():
 #-----------------------------------Clean Tkinter elements------------------------#
     #esta função limpa os elementos tkinter de cada aba da pagina
 def cleanElements():
-    categoryName.destroy()
-    btnSubmitCathegory.destroy()
+    taskLabel.destroy()
+    taskName.destroy()
+    btnSubmitTask.destroy()
+    taskCategoryDropdown.destroy()
+    taskCategoryLabel.destroy()
+    taskDate.destroy()
     btnAddTask.destroy()
     searchName.destroy()
     btnSearch.destroy()
@@ -461,6 +507,8 @@ btnInciarSessao.grid(row=0, column=1)
 btnCriarConta = Button(window, width = 20, height= 2, text = "Criar Conta", bd=1, fg='white', bg='#006BB8', relief = "raised",command = register)
 btnCriarConta.grid(row=0, column=2)
 
+btnClearScreen = Button(window, width = 20, height=2, text = "Clear Screen", bd=1,fg='white', bg='#006BB8', relief = "raised",command = cleanElements)
+btnClearScreen.grid(row=0,column=3)
 #Canvas com botões da esquerda
 btnCanvas = Canvas(window, width = 200, height = 460, bg='#7e6b8f', bd=0, relief = "flat")
 btnCanvas.grid(row=1, column=0, rowspan=40)
