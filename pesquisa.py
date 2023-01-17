@@ -31,6 +31,7 @@ dia = current_date.day
 
 calendar = Calendar(window.panel_1, selectmode = 'day',year =ano, month = mes,day = dia, locale='pt_br')
 calendar.place(x=170, y=20)
+calendar.selection_clear()
  
 def grad_date():
     lbl_date.config(text = "Dia selecionado: " + calendar.get_date())
@@ -53,7 +54,9 @@ nome_entry.place(x=450, y=50, width=350, height=20)
 lbl_categ = Label(window.panel_1, text="Categoria: ", font = ("Verdana", 10))
 lbl_categ.place(x=450, y=80)
 
-categ = ['Estudos', 'Lazer', 'Casa']
+f = open("categorias.txt", "r", encoding="utf-8")
+categ = f.readlines()
+f.close()
 categorias = ttk.Combobox(window.panel_1, values=categ, state="readonly")
 categorias.place(x = 450, y = 110)
 
@@ -80,20 +83,23 @@ def filtrar():
     tarefas = f.readlines()
     f.close()
     tar = 0
-    
-
-    print(categorias.get())
-    print(estados.get())
     for i in range (len(tarefas)):
         campos = tarefas[i].split(";")
         if nome_entry.get().upper() == campos[0].upper() or nome_entry.get() == "":
-            if calendar.get_date() == (campos[1].replace("-", "/")) or calendar.get_date() == current_date.strftime("%d/%m/%Y"):
-                if categorias.get() in campos[2] or categorias.get() == "": 
+            if calendar.get_date() == (campos[1].replace("-", "/")) or calendar.get_date() == "":
+                if campos[2] in categorias.get() or categorias.get() == "": 
                     if estados.get() in campos[3] or estados.get() == "":
                         lista_tarefas.insert("", "end", values=(campos[0],campos[1], campos[2], campos[3]))
                         tar += 1
     if tar == 0:
-        messagebox.showerror(title="Erro!", message="Não há tarefas com este nome!")
+        messagebox.showerror(title="Erro!", message="Não há tarefas com este filtro!")
+    if nome_entry.get() == "":
+        if calendar.get_date() == "":
+            if categorias.get() == "":
+                if estados.get() == "":
+                    messagebox.showinfo(title="Sem filtro", message="Nenhum filtro foi aplicado!")
+
+
     limpar()
 
     
