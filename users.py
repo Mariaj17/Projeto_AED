@@ -159,7 +159,7 @@ def taskValidation():
         print(userList)      
 
 
-def addTask():
+def sendTask():
     messageShown = False
     with open("Files/users.txt", "r") as file:
         users = file.readlines()
