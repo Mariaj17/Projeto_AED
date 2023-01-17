@@ -14,13 +14,13 @@ def register_user():
         with open("Files/users.txt", "w") as file:
 
             file.write(
-                "totalActivities" + ";" +
-                "currentActivities" + ";" +
+                "0" + ";" +
+                "0" + ";" +
                 "admin" + ";" +
                 "123" + ";" +
                 "False" + ";" +
                 "admin@gmail.com" + ";" +
-                "admin" + ";" +
+                "admin" +
                 "\n")
 
             messagebox.showinfo("Error, file does not exist!", "The file did not exist but we created one for you, try registering now!")
@@ -49,7 +49,7 @@ def saveUser():
                 passwordInfo + ";" +
                 "False" + ";" +
                 emailInfo + ";" +
-                "normal" + ";" +
+                "normal" + 
                 "\n")
         messagebox.showinfo("Account was successfully!", "Your new account has been created!")
         
@@ -141,7 +141,7 @@ def taskValidation():
             if userChosen.get() in userList[i]:
                 index = i
                 #verifica as atividades do utilizador no momento em que vai fazer logout. este valor sera depois comparado com o total de atividades de forma a criar a notificação
-                currentActivities = len(userList[index].split(";")[6:-1])
+                currentActivities = len(userList[index].split(";")[5:-1])
                 #escrever a nova atividade no fim da linha do utilizador e separar por ";"    
         with open("Files/users.txt", "w") as file:
             line = userList[index].strip().split(";")

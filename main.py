@@ -17,8 +17,9 @@ global screenWidth
 global appHeight, appWidth
 global x, y
 
+global currentUser
 
-
+currentUser = []
 #-----------------------------------Functions-----------------------------#
 
     #caso um utilizador logado desligue a pagina de forma forçada a aplicação ao inicializar vai colocar como falso o login de todos os users 
@@ -40,7 +41,7 @@ def init():
                 "123" + ";" +
                 "False" + ";" +
                 "admin@gmail.com" + ";" +
-                "admin" + ";" +
+                "admin" +
                 "\n")       
         
 init()
@@ -85,7 +86,10 @@ def logout():
             if utils.checkUserLogged(username1, users) == False:
                 changeButton("Iniciar Sessões" ,login)
             logoutSucess()
+            currentUser.pop()
+            print(currentUser)
             userLabel.config(text="")
+            
 
 
 
@@ -100,6 +104,7 @@ def loggedUser(usernameLogged, index):
             file.writelines(users)
             if utils.checkUserLogged(usernameLogged, users) == True:
                 changeButton("Terminar sessão",logout)
+                currentUser.append(usernameLogged)
             if utils.checkUserLogged(usernameLogged, users) == False:
                 changeButton("Iniciar Sessões" ,login)
         userLabel.config(text=usernameLogged)
@@ -112,15 +117,21 @@ def loginValidation():
     usernameEntry1.delete(0,END)
     passwordEntry1.delete(0,END)
 
-    #List_of_files = os.listdir()
-
     try:
         with open("Files/users.txt", "r") as file:
             print("FIle exists1")
     except FileNotFoundError:
         with open("Files/users.txt", "w") as file:
             messagebox.showerror("Error 404 file not found!", "The aplication has no users! please create one in the registration page")
-            file.write("admin" + ";" + "123" + ";" + "admin@gmail.com" + ";" + "admin" + "\n")
+            file.write(
+                "0" + ";" +
+                "0" + ";" +
+                "admin" + ";" +
+                "123" + ";" +
+                "False" + ";" +
+                "admin@gmail.com" + ";" +
+                "admin"  +
+                "\n")
             screen2.destroy()
     else:
         with open("Files/users.txt", "r") as file:
@@ -135,6 +146,7 @@ def loginValidation():
                         loginSuccess()
                         loggedUser(username1, Fields[0])  # devolve o nome to utilizador e o index da linha to ficheiro do utilizador
                         print("login done move to page")
+                        print(currentUser)
                         notification("Files/users.txt", username1)
                         return
                     else:
@@ -173,7 +185,9 @@ def login():
 
 def PagTarefas():
     createDropCategory()
-    utils.checkUserLogged()
+    with open("Files/users.txt", "r") as file:
+        users = file.readlines()
+    utils.checkUserLogged(currentUser[0], users)
 
     windowTarefas = Toplevel()   # Objeto da classe Toplevel, janela principal
     windowTarefas.title("Criar Tarefas") 
