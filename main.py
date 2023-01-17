@@ -234,7 +234,7 @@ def searchTask():
 
 #-----------------------------------Admin Menu---------------------------#
 def addManageElements():
-    global categoryLabel, categoryEntry, btnAddCathegory, categoryBoxLabel, categoryDropdown, userLabel, userDropdown, btnRemoveUser
+    global categoryLabel, categoryEntry, btnAddCategory, categoryBoxLabel, categoryDropdown, btnRemoveCategory, userLabel, userDropdown, btnRemoveUser, addUserLabel, usernameLabel, usernameEntry, passwordLabel, passwordEntry, emailLabel, emailEntry, userTypeLabel, userType, adminAddBtn
     if currentUser == []:
         messagebox.showerror("No user is logged", "To view this you need to be logged in with an admin account!")
     elif currentUser[1] == "admin":
@@ -248,14 +248,48 @@ def addManageElements():
         categoryEntry = Entry(window)
         categoryEntry.grid(row=2, column=1, padx=(10,10))
 
-        btnAddCathegory = Button(window, text="Submit", command=addCategory)
-        btnAddCathegory.grid(row=3, column=1, padx=(10,10))
+        btnAddCategory = Button(window, text="Submit", command=addCategory)
+        btnAddCategory.grid(row=3, column=1, padx=(10,10))
 
         categoryBoxLabel = Label(window, text="All categories", bg="#a3d9ff")
         categoryBoxLabel.grid(row=1,column=2, padx=(10,10))
 
         categoryDropdown = ttk.Combobox(window)
         categoryDropdown.grid(row=2, column=2, padx=(10,10))
+
+        btnRemoveCategory = Button(window, text="Remove Category", command=removeCategory)
+        btnRemoveCategory.grid(row=3, column=2, padx=(10,10))
+
+        addUserLabel = Label(window, text="Add a new user:", bg="#a3d9ff")
+        addUserLabel.grid(row=4, column=1, padx=(10,10), pady=(10,10))
+
+        usernameLabel = Label(window, text="Username:", bg="#a3d9ff")
+        usernameLabel.grid(row=5, column=1, padx=(10,10))
+
+        usernameEntry = Entry(window)
+        usernameEntry.grid(row=6, column=1, padx=(10,10))
+
+        passwordLabel = Label(window, text="Password:", bg="#a3d9ff")
+        passwordLabel.grid(row=7, column=1, padx=(10,10))
+
+        passwordEntry = Entry(window, show="*")
+        passwordEntry.grid(row=8, column=1, padx=(10,10))
+
+        emailLabel = Label(window, text="Email:", bg="#a3d9ff")
+        emailLabel.grid(row=9, column=1, padx=(10,10))
+
+        emailEntry = Entry(window)
+        emailEntry.grid(row=10, column=1, padx=(10,10))
+
+        userTypeLabel = Label(window, text="User Type:", bg="#a3d9ff")
+        userTypeLabel.grid(row=11, column=1, padx=(10,10))
+
+        userType = ttk.Combobox(window, values=["normal", "admin"])
+        userType.grid(row=12, column=1, padx=(10,10))
+        userType.current(0)
+
+        adminAddBtn = Button(window, text="Add User", command=addUser)
+        adminAddBtn.grid(row=13, column=1, padx=(10,10))
             
             #verificar se o ficheiro existe
         if os.path.exists("Files/category.txt"):
@@ -285,6 +319,11 @@ def addManageElements():
     else:
         messagebox.showerror("Access Denied", "Your account does not have admin access!")
 
+    
+
+
+
+
 def addCategory():
     categoryValue = categoryEntry.get()
     if categoryValue.strip() == '':
@@ -306,7 +345,22 @@ def addCategory():
         with open("Files/category.txt", "w") as file:
             file.write(categoryValue.strip() + "\n")
             messagebox.showinfo("Category Added", f"The category {categoryValue} was added!")
-        
+
+
+def removeCategory():
+    selected_category = categoryDropdown.get()
+    if selected_category == "":
+        messagebox.showerror("Error", "No category selected")
+    else:
+        with open("Files/category.txt", "r") as file:
+            categories = file.readlines()
+        with open("Files/category.txt", "w") as file:
+            for category in categories:
+                if category.strip() != selected_category:
+                    file.write(category)
+        messagebox.showinfo("Category removed", f"The category {selected_category} was removed.")
+        categoryDropdown['values'] = [category.strip() for category in categories if category.strip() != selected_category]
+        categoryDropdown.current(0)    
 
 def removeUser():
     user = userDropdown.get()
@@ -322,9 +376,35 @@ def removeUser():
                 if user != line.split(";")[2]:
                     file.write(line)
             messagebox.showinfo("User removed", f"The user {user} was removed.")
-            userDropdown.set("")
+            userDropdown.current(0)
     else:
         messagebox.showerror("Error", "User file not found.")
+    addManageElements()
+
+
+def addUser():
+    username = usernameEntry.get()
+    password = passwordEntry.get()
+    email = emailEntry.get()
+    user_type = userType.get()
+
+    if os.path.exists("Files/users.txt"):
+        with open("Files/users.txt", "r") as file:
+            users = file.readlines()
+            for user in users:
+                if username == user.strip().split(';')[2]:
+                    messagebox.showerror("Error", "Username already exists.")
+                    return
+    else:
+        messagebox.showerror("Error", "User file not found.")
+        return
+    # add the user to the file
+    with open("Files/users.txt", "a") as file:
+        file.write(f"0;0;{username};{password};False;{email};{user_type}\n")
+    messagebox.showinfo("Success", "User added successfully.")
+    userDropdown['values'] = [user.strip().split(';')[2] for user in users] + [username]
+    userDropdown.current(len(userDropdown['values']) - 1)
+
 
 #-----------------------------------Clean Tkinter elements------------------------#
     #esta função limpa os elementos tkinter de cada aba da pagina
@@ -336,7 +416,23 @@ def cleanElements():
     btnSearch.destroy()
     categoryLabel.destroy()
     categoryEntry.destroy()
-    btnAddCathegory.destroy()
+    btnAddCategory.destroy()
+    categoryBoxLabel.destroy() 
+    categoryDropdown.destroy() 
+    btnRemoveCategory.destroy() 
+    userLabel.destroy() 
+    userDropdown.destroy() 
+    btnRemoveUser.destroy() 
+    addUserLabel.destroy() 
+    usernameLabel.destroy() 
+    usernameEntry.destroy() 
+    passwordLabel.destroy() 
+    passwordEntry.destroy() 
+    emailLabel.destroy() 
+    emailEntry.destroy() 
+    userTypeLabel.destroy() 
+    userType.destroy() 
+    adminAddBtn.destroy()
 #-----------------------------------MainScreen----------------------------#
 
 window.config(bg = '#a3d9ff')
