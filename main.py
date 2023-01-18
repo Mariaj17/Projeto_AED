@@ -251,6 +251,10 @@ def addTask():
                 return
     with open("Files/tasksNotDone.txt", "a") as file:
         file.write(f"{currentUser[0]};{categoryValue};[{taskValue},{selectedDate}]\n")
+    with open("Files/tasksDoing.txt", "w") as file:
+        file.write(f"{currentUser[0]};{categoryValue};\n")
+    with open("Files/tasksDone.txt", "w") as file:
+        file.write(f"{currentUser[0]};{categoryValue};\n")
 
 
 
