@@ -66,7 +66,7 @@ def notification(userFile, user):
                         newTasksAmount = int(values[1]) - int(values[0])
                         tasksList = values[7:]
                         tasks = " | ".join(tasksList)
-                        messagebox.showinfo("New tasks", f"You have {newTasksAmount} new tasks available that were sent while you were offline! Those tasks are... {tasks}")
+                        messagebox.showinfo("New tasks", f"Você tem {newTasksAmount} novas tarefas desponiveis que foram entregues enquanto estava offline! Essas tarefas são... {tasks}")
                 except ValueError:
                     pass
 
@@ -129,7 +129,7 @@ def loginValidation():
             print("FIle exists1")
     except FileNotFoundError:
         with open("Files/users.txt", "w") as file:
-            messagebox.showerror("Error 404 file not found!", "The aplication has no users! please create one in the registration page")
+            messagebox.showerror("Error 404 file not found!", "A aplicação não tem utilizadores! Por favor crie uma na pag de registo")
             file.write(
                 "0" + ";" +
                 "0" + ";" +
@@ -172,7 +172,7 @@ def login():
     screen2 = Toplevel()
     screen2.title("login")
     screen2.geometry("300x250")
-    Label(screen2,text = "Please enter your information").pack()
+    Label(screen2,text = "Por favor coloque a sua informação").pack()
     Label(screen2,text = "").pack()
 
 
@@ -212,20 +212,20 @@ def addTaskElements():
     taskName = Entry(canvasAddTask)
     taskName.place(x=80,y=55)
 
-    btnSubmitTask = Button(canvasAddTask, text="Submit", width = 12, height= 1, font=("Verdana", 10), command=addTask)
-    btnSubmitTask.place(x=450,y=20)
+    btnSubmitTask = Button(canvasAddTask, text="Submeter", width = 12, height= 1, font=("Verdana", 10), command=addTask)
+    btnSubmitTask.place(x=540,y=20)
 
     btnRemoveTask = Button(canvasAddTask, text="Remover", width = 12, height= 1, font=("Verdana", 10))
-    btnRemoveTask.place(x=450,y=70)
+    btnRemoveTask.place(x=540,y=70)
 
     taskCategoryLabel = Label(canvasAddTask, text="Escolhe a categoria:", bg="#a3d9ff", font=("Verdana", 11))
     taskCategoryLabel.place(x=10,y=100)
 
     taskCategoryDropdown = ttk.Combobox(canvasAddTask)
-    taskCategoryDropdown.place(x=180,y=100)
+    taskCategoryDropdown.place(x=170,y=100)
 
-    btnAddTask = Button(canvasAddTask, width = 20, height= 2, text = "Enviar Tarefa", bd=1, fg='white', bg='#006BB8', relief = "raised",command=sendTask)
-    btnAddTask.grid(row=1, column=3,padx=(10,10))
+    btnAddTask = Button(canvasAddTask, width = 12, height= 1, text = "Enviar Tarefa", font=("Verdana", 10), bd=1, fg='white', bg='#006BB8', relief = "raised",command=sendTask)
+    btnAddTask.place(x=50,y=120)
 
 
     """ taskDate = Calendar(window, selectmode = "day",year=2022,month=1,date=1)
@@ -262,7 +262,7 @@ def addTask():
     categoryValue = taskCategoryDropdown.get()
     selectedDate = taskDate.get_date()
     if currentUser == []:
-        messagebox.showerror("No user is logged in", "Please log in to add a task.")
+        messagebox.showerror("No user is logged in", "Por favor inicie a sessão para adicionar a tarefa.")
         return
     if not os.path.exists("Files/tasksNotDone.txt"):
         open("Files/tasksNotDone.txt", "w").close()
@@ -271,7 +271,7 @@ def addTask():
         for i, line in enumerate(tasks):
             if currentUser[0] in line:
                 if taskValue in line:
-                    messagebox.showerror("Task already exists", "The task you are trying to add already exists.")
+                    messagebox.showerror("Task already exists", "Essa tarefa já existe.")
                     return
                 tasks[i] = line.rstrip() + f";[{taskValue},{selectedDate}]\n"
                 with open("Files/tasksNotDone.txt", "w") as file:
@@ -384,7 +384,7 @@ def addPersonalElements():
     except:
         pass
     if currentUser == []:
-        messagebox.showerror("No user is logged", "To view this you need to be logged in and have an admin account!")
+        messagebox.showerror("No user is logged", "Para ver isto tem que iniciar a sessão e ter uma conta admin!")
         return
     if os.path.exists("Files/tasksNotDone.txt"):
         i = 1
@@ -398,7 +398,9 @@ def addPersonalElements():
                         taskButton.grid(row=i+j, column=1)
                         taskButtons.append(taskButton)
     else:
-        messagebox.showerror("No task", "There are no tasks")
+        messagebox.showerror("No task", "Não há tarefas")
+
+    
 
 
 
@@ -407,7 +409,7 @@ def addPersonalElements():
 def addManageElements():
     global categoryLabel, categoryEntry, btnAddCategory, categoryBoxLabel, categoryDropdown, btnRemoveCategory, userLabel, userDropdown, btnRemoveUser, addUserLabel, usernameLabel, usernameEntry, passwordLabel, passwordEntry, emailLabel, emailEntry, userTypeLabel, userType, adminAddBtn, canvasAddCategory, canvasaddUser, canvasRemoveUser,catLabel
     if currentUser == []:
-        messagebox.showerror("No user is logged", "To view this you need to be logged in and have an admin account!")
+        messagebox.showerror("No user is logged", "Para ver isto tem que iniciar a sessão e ter uma conta admin!")
     elif currentUser[1] == "admin":
         try:
             cleanElements()
@@ -426,7 +428,7 @@ def addManageElements():
         categoryEntry = Entry(canvasAddCategory)
         categoryEntry.place(x=280,y=60)
 
-        btnAddCategory = Button(canvasAddCategory, text="Submit",font=("Verdana", 10), command=addCategory)
+        btnAddCategory = Button(canvasAddCategory, text="Submeter",font=("Verdana", 10), command=addCategory)
         btnAddCategory.place(x=430,y=55)
 
         categoryBoxLabel = Label(canvasAddCategory, text="Todas as Categorias", bg="#a3d9ff",font=("Verdana", 11))
@@ -435,14 +437,14 @@ def addManageElements():
         categoryDropdown = ttk.Combobox(canvasAddCategory)
         categoryDropdown.place(x=180,y=110)
 
-        btnRemoveCategory = Button(canvasAddCategory, text="Remove Category",font=("Verdana", 10), command=removeCategory)
+        btnRemoveCategory = Button(canvasAddCategory, text="Remover Categoria",font=("Verdana", 10), command=removeCategory)
         btnRemoveCategory.place(x=430,y=105)
 
         #Canvas Add User
         canvasaddUser = Canvas(window, width = 650, height = 150, bg='#a3d9ff', bd=1, relief = "flat")
         canvasaddUser.place(x=200, y=255)
 
-        addUserLabel = Label(canvasaddUser, text="Add a new user:", bg="#a3d9ff",font=("Verdana", 14))
+        addUserLabel = Label(canvasaddUser, text="Adicionar novo utilizador:", bg="#a3d9ff",font=("Verdana", 14))
         addUserLabel.place(x=10,y=10)
 
         usernameLabel = Label(canvasaddUser, text="Username:", bg="#a3d9ff",font=("Verdana", 11))
@@ -463,14 +465,14 @@ def addManageElements():
         emailEntry = Entry(canvasaddUser)
         emailEntry.place(x=110,y=80)
 
-        userTypeLabel = Label(canvasaddUser, text="User Type:", bg="#a3d9ff",font=("Verdana", 11))
+        userTypeLabel = Label(canvasaddUser, text="Tipo de utilizador:", bg="#a3d9ff",font=("Verdana", 11))
         userTypeLabel.place(x=310,y=80)
 
         userType = ttk.Combobox(canvasaddUser, values=["normal", "admin"])
         userType.place(x=410,y=80)
         userType.current(0)
 
-        adminAddBtn = Button(canvasaddUser, text="Add User",font=("Verdana", 10), command=addUser)
+        adminAddBtn = Button(canvasaddUser, text="Adicionar utilizador",font=("Verdana", 10), command=addUser)
         adminAddBtn.place(x=520,y=115)
             
             #verificar se o ficheiro existe
@@ -484,7 +486,7 @@ def addManageElements():
         canvasRemoveUser = Canvas(window, width = 650, height = 120, bg='#a3d9ff', bd=1, relief = "flat")
         canvasRemoveUser.place(x=200, y=450)
 
-        userLabel = Label(canvasRemoveUser, text="Select a user to remove:", bg="#a3d9ff",font=("Verdana", 14))
+        userLabel = Label(canvasRemoveUser, text="Selecionar utilizador para remover:", bg="#a3d9ff",font=("Verdana", 14))
         userLabel.place(x=10, y=10)
 
         userDropdown = ttk.Combobox(canvasRemoveUser)
@@ -497,11 +499,11 @@ def addManageElements():
                 userDropdown['values'] = [user.strip().split(';')[2] for user in users]
                 userDropdown.current(0)
 
-        btnRemoveUser = Button(canvasRemoveUser, text="Remove User",font=("Verdana", 10))
+        btnRemoveUser = Button(canvasRemoveUser, text="Remover Utilizador",font=("Verdana", 10))
         btnRemoveUser.place(x=200, y=65)
         
     else:
-        messagebox.showerror("Access Denied", "Your account does not have admin access!")
+        messagebox.showerror("Access Denied", "A sua conta não tem acesso admin!")
 
     
 
@@ -511,30 +513,30 @@ def addManageElements():
 def addCategory():
     categoryValue = categoryEntry.get()
     if categoryValue.strip() == '':
-        messagebox.showerror("Error", "Category value cannot be empty")
+        messagebox.showerror("Error", "O valor da categoria não pode estar vazio!")
         return
     if os.path.exists("Files/category.txt"):
         with open("Files/category.txt", "r") as file:
             categories = file.readlines()
             for line in categories:
                 if categoryValue.strip().lower() == line.strip().lower():
-                    messagebox.showerror("Already exists", "The category you are trying to add already exists!")
+                    messagebox.showerror("Already exists", "Esta categoria já existe!")
                     return
             else:
                 with open("Files/category.txt", "a") as file:
                     file.write(categoryValue.strip() + "\n")
-                    messagebox.showinfo("Category Added", f"The category {categoryValue} was added!")
+                    messagebox.showinfo("Category Added", f"A categoria {categoryValue} foi adicionada!")
                     categoryEntry.delete(0, 'end')
     else:
         with open("Files/category.txt", "w") as file:
             file.write(categoryValue.strip() + "\n")
-            messagebox.showinfo("Category Added", f"The category {categoryValue} was added!")
+            messagebox.showinfo("Category Added", f"TA categoria {categoryValue} foi adicionada!")
 
 
 def removeCategory():
     selected_category = categoryDropdown.get()
     if selected_category == "":
-        messagebox.showerror("Error", "No category selected")
+        messagebox.showerror("Error", "Nenhuma categoria adicionada")
     else:
         with open("Files/category.txt", "r") as file:
             categories = file.readlines()
@@ -542,14 +544,14 @@ def removeCategory():
             for category in categories:
                 if category.strip() != selected_category:
                     file.write(category)
-        messagebox.showinfo("Category removed", f"The category {selected_category} was removed.")
+        messagebox.showinfo("Category removed", f"A categoria {selected_category} foi removida.")
         categoryDropdown['values'] = [category.strip() for category in categories if category.strip() != selected_category]
         categoryDropdown.current(0)    
 
 def removeUser():
     user = userDropdown.get()
     if user.strip() == '':
-        messagebox.showerror("Error", "Please select a user to remove.")
+        messagebox.showerror("Error", "Por favor selecione um utilizador para remover.")
         return
     if os.path.exists("Files/users.txt"):
         with open("Files/users.txt", "r") as file:
@@ -559,10 +561,10 @@ def removeUser():
                     # se o user for difrente ao index dois da linha (ou seja ao username) entao vai escrever a linha. dessa forma escreve todos os users menos o selecionado e com isto remove o
                 if user != line.split(";")[2]:
                     file.write(line)
-            messagebox.showinfo("User removed", f"The user {user} was removed.")
+            messagebox.showinfo("User removed", f"O utilizador {user} foi removido.")
             userDropdown.current(0)
     else:
-        messagebox.showerror("Error", "User file not found.")
+        messagebox.showerror("Error", "Não encontrada ficha do utilizador.")
     addManageElements()
 
 
@@ -577,15 +579,15 @@ def addUser():
             users = file.readlines()
             for user in users:
                 if username == user.strip().split(';')[2]:
-                    messagebox.showerror("Error", "Username already exists.")
+                    messagebox.showerror("Error", "Nome de utilizador já usado.")
                     return
     else:
-        messagebox.showerror("Error", "User file not found.")
+        messagebox.showerror("Error", "Não encontrada ficha do utilizador")
         return
     # add the user to the file
     with open("Files/users.txt", "a") as file:
         file.write(f"0;0;{username};{password};False;{email};{user_type}\n")
-    messagebox.showinfo("Success", "User added successfully.")
+    messagebox.showinfo("Success", "O utilizador foi adicionado com sucesso.")
     userDropdown['values'] = [user.strip().split(';')[2] for user in users] + [username]
     userDropdown.current(len(userDropdown['values']) - 1)
 
@@ -675,7 +677,7 @@ btnInciarSessao.place(x=644, y=0)
 btnCriarConta = Button(window, width = 15, height= 2, text = "Criar Conta", bd=1, fg='white', bg='#006BB8',font=("Verdana", 10), relief = "raised",command = register)
 btnCriarConta.place(x=772, y=0)
 
-btnClearScreen = Button(window, width = 15, height=2, text = "Clear Screen", bd=1,fg='white', bg='#006BB8',font=("Verdana", 10), relief = "raised",command = cleanElements)
+btnClearScreen = Button(window, width = 15, height=2, text = "Limpar tela", bd=1,fg='white', bg='#006BB8',font=("Verdana", 10), relief = "raised",command = cleanElements)
 btnClearScreen.place(x=300, y=0)
 
 #Canvas com botões da esquerda
