@@ -229,7 +229,7 @@ def addTaskElements():
 
 
     """ taskDate = Calendar(window, selectmode = "day",year=2022,month=1,date=1)
-    taskDate.place() """
+    taskDate.place(x=0,y=0) """
 
     canvasTask = Canvas(window,  width = 645, height = 300, bg='#a3d9ff', bd=1, relief = "flat")
     canvasTask.place(x=200,y=250)
