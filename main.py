@@ -5,8 +5,7 @@ from PIL import ImageTk,Image
 import os
 from users import *
 import utils
-from tarefas import *
-from categorias import *
+from pesquisa import *
 from pip import *
 """ from tkcalendar import Calendar """
 
@@ -230,7 +229,7 @@ def addTaskElements():
 
 
     """ taskDate = Calendar(window, selectmode = "day",year=2022,month=1,date=1)
-    taskDate.grid(row=4, column=1, padx=(10,10)) """
+    taskDate.place() """
 
     canvasTask = Canvas(window,  width = 645, height = 300, bg='#a3d9ff', bd=1, relief = "flat")
     canvasTask.place(x=200,y=250)
@@ -291,27 +290,91 @@ def addTask():
 
 #-----------------------------------pesquisa------------------------------#
 def addSearchElements():
-    global searchName, btnSearch
+    global canvasSearch, lbl_filtro, btn_getDate, lbl_date, lbl_nome, nome_entry, lbl_categ, categorias, lbl_estado, estados, btn_limpar, btn_filtrar, lista_tarefas, canvaslista, calendar
     try:
         cleanElements()
     except:
         pass
     # Canvas Pesquisa
-    canvasSearch = Canvas(window,  width = 650, height = 150, bg='#a3d9ff', bd=1, relief = "flat")
+    canvasSearch = Canvas(window,  width = 650, height = 200, bg='#a3d9ff', bd=1, relief = "flat")
     canvasSearch.place(x=200, y=50)
 
-    datefilterLabel = Label(window.panel_1, text="Data: ", font=('Verdana', 10))
-    datefilterLabel.place(x=20, y=20)
+    # Labels
+    lbl_filtro = Label(canvasSearch, text="Data: ", bg='#a3d9ff', font=('Verdana', 10))
+    lbl_filtro.place(x=10, y=10)
 
-    btnSearch = Button(window, text="Submit", command=searchTask)
-    btnSearch.grid(row=2, column=1)
+    # Button e Label get data
+    btn_getDate = Button(canvasSearch, text = "Ver dia selecionado", width = 12, height= 1, bd=1, fg='white', bg='#006BB8', relief = "raised", font=("Verdana", 10),command = grad_date)
+    btn_getDate.place(x=10, y= 170)
 
-    
+    lbl_date = Label(canvasSearch, text = "", bg='#000000', font = ("Verdana", 7))
+    lbl_date.place(x=50, y=10)
+
+    """ calendar = Calendar(window.panel_1, selectmode = 'day',year =ano, month = mes,day = dia, locale='pt_br')
+    calendar.place(x=170, y=20)
+    calendar.selection_clear()
+    """
+
+    # Nome
+    lbl_nome = Label(canvasSearch, text="Nome: ", bg='#a3d9ff', font = ("Verdana",10))
+    lbl_nome.place(x=180, y=30)
+
+    nome_entry = Entry(canvasSearch)
+    nome_entry.place(x=230, y=30)
+
+    # Categoria
+    lbl_categ = Label(canvasSearch, text="Categoria: ", bg='#a3d9ff', font = ("Verdana", 10))
+    lbl_categ.place(x=180, y=80)
+
+    f = open("files\category.txt", "r", encoding="utf-8")
+    categ = f.readlines()
+    f.close()
+
+    categorias = ttk.Combobox(canvasSearch, values=categ, state="readonly")
+    categorias.place(x = 260, y = 80)
+
+    # Estado
+    lbl_estado = Label(canvasSearch, text="Estado: ", bg='#a3d9ff', font = ("Verdana", 10))
+    lbl_estado.place(x=180, y= 130)
+
+    est = ['Feito', 'Por fazer', 'Fazendo']
+    estados = ttk.Combobox(canvasSearch, values=est, state="readonly")
+    estados.place(x = 240, y = 130)
+
+    # Button limpar
+    btn_limpar = Button(canvasSearch, text="Limpar", width = 12, height= 1, bd=1, fg='white', bg='#006BB8', relief = "raised", font=("Verdana", 10), command=limpar)
+    btn_limpar.place(x=500, y=50)
+
+    # Button filtrar
+    btn_filtrar = Button(canvasSearch, text="Filtrar", width = 12, height= 1, bd=1, fg='white', bg='#006BB8', relief = "raised", font=("Verdana", 10), command=filtrar)
+    btn_filtrar.place(x=500, y=120)
+
+    #Canvas da treeview
+    canvaslista = Canvas(window,  width = 645, height = 300, bg='#a3d9ff', bd=1, relief = "flat")
+    canvaslista.place(x=200,y=270)
+
+    # Treeview
+    lista_tarefas = ttk.Treeview(canvaslista, height=14, column=("col1", "col2", "col3", "col4"))
+    lista_tarefas.heading("#0", text="")
+    lista_tarefas.heading("#1", text="Nome")
+    lista_tarefas.heading("#2", text="Data")
+    lista_tarefas.heading("#3", text="Categoria")
+    lista_tarefas.heading("#4", text="Estado")
+
+    lista_tarefas.column("#0", width=1)
+    lista_tarefas.column("#1", width=200)
+    lista_tarefas.column("#2", width=150)
+    lista_tarefas.column("#3", width=150)
+    lista_tarefas.column("#4", width=150)
+
+    lista_tarefas.place(x=0, y=0)
 
 
-def searchTask():
+
+
+""" def searchTask():
     searchValue = searchName.get()
-    print(searchValue)
+    print(searchValue) """
 #---------------------------------------- Personal Area------------------#
 def addPersonalElements():
     global taskButtons
@@ -539,8 +602,6 @@ def cleanElements():
     taskCategoryLabel.destroy()
     #taskDate.destroy()
     btnAddTask.destroy()
-    searchName.destroy()
-    btnSearch.destroy()
     categoryLabel.destroy()
     categoryEntry.destroy()
     btnAddCategory.destroy()
@@ -568,6 +629,22 @@ def cleanElements():
     canvasTask.destroy()
     createtaskLabel.destroy()
     treeTaskCreate.destroy()
+    canvasSearch.destroy()
+    lbl_filtro.destroy()
+    btn_getDate.destroy()
+    lbl_date.destroy()
+    lbl_nome.destroy()
+    nome_entry.destroy()
+    lbl_categ.destroy()
+    categorias.destroy()
+    lbl_estado.destroy()
+    estados.destroy()
+    btn_limpar.destroy()
+    btn_filtrar.destroy()
+    lista_tarefas.destroy()
+    canvaslista.destroy()
+    #calendar.destroy()
+
 #-----------------------------------MainScreen----------------------------#
 
 window.config(bg = '#FDF4E3')
