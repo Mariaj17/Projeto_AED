@@ -667,15 +667,15 @@ window.maxsize(900, 600)
 
 # MainPage
 userLabel = Label(window, width = 5, height = 2, text = "", bg='#FDF4E3', fg="black", font=("Verdana", 10))
-userLabel.place(x=10, y=10)
+userLabel.place(x=20, y=10)
 
-btnInciarSessao = Button(window, width = 12, height= 2, text = "Iniciar Sessão", bd=1,fg='white', bg='#006BB8',font=("Verdana", 10), relief = "raised",command = login)
-btnInciarSessao.place(x=200, y=0)
+btnInciarSessao = Button(window, width = 15, height= 2, text = "Iniciar Sessão", bd=1,fg='white', bg='#006BB8',font=("Verdana", 10), relief = "raised",command = login)
+btnInciarSessao.place(x=644, y=0)
 
-btnCriarConta = Button(window, width = 12, height= 2, text = "Criar Conta", bd=1, fg='white', bg='#006BB8',font=("Verdana", 10), relief = "raised",command = register)
-btnCriarConta.place(x=250, y=0)
+btnCriarConta = Button(window, width = 15, height= 2, text = "Criar Conta", bd=1, fg='white', bg='#006BB8',font=("Verdana", 10), relief = "raised",command = register)
+btnCriarConta.place(x=772, y=0)
 
-btnClearScreen = Button(window, width = 12, height=2, text = "Clear Screen", bd=1,fg='white', bg='#006BB8',font=("Verdana", 10), relief = "raised",command = cleanElements)
+btnClearScreen = Button(window, width = 15, height=2, text = "Clear Screen", bd=1,fg='white', bg='#006BB8',font=("Verdana", 10), relief = "raised",command = cleanElements)
 btnClearScreen.place(x=300, y=0)
 
 #Canvas com botões da esquerda
