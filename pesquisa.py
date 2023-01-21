@@ -54,7 +54,7 @@ nome_entry.place(x=450, y=50, width=350, height=20)
 lbl_categ = Label(window.panel_1, text="Categoria: ", font = ("Verdana", 10))
 lbl_categ.place(x=450, y=80)
 
-f = open("files\category.txt", "r", encoding="utf-8")
+f = open("files\categorias.txt", "r", encoding="utf-8")
 categ = f.readlines()
 f.close()
 categorias = ttk.Combobox(window.panel_1, values=categ, state="readonly")
