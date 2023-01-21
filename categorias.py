@@ -10,7 +10,7 @@ def createDropCategory():
     for linha in ficha:
         options.append(linha)
 
-def insesirCategoria():
+def insertCategory():
     f=open(fcategoria, "r", encoding="utf-8")
     ficha=f.readlines()
     f.close()

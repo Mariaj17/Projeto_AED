@@ -7,7 +7,8 @@ from users import *
 import utils
 from tarefas import *
 from categorias import *
-from tkcalendar import Calendar
+from pip import *
+""" from tkcalendar import Calendar """
 
 
 global window
@@ -194,32 +195,60 @@ def login():
 
 #-----------------------------------Criar Tarefa--------------------------#
 def addTaskElements():
-    global taskLabel, taskName, btnSubmitTask, btnAddTask, taskCategoryDropdown, taskCategoryLabel, taskDate
+    global taskLabel, taskName, btnSubmitTask, btnAddTask, taskCategoryDropdown, taskCategoryLabel, canvasAddTask, btnRemoveTask, canvasTask, createtaskLabel,treeTaskCreate, taskDate
     try:
         cleanElements()
     except:
         pass
-    taskLabel= Label(window, text="What task do you wish to add?", bg="#a3d9ff")
-    taskLabel.grid(row=1, column=1, padx=(10,10))
+    #Canvas Add Tast
+    canvasAddTask = Canvas(window,  width = 650, height = 150, bg='#a3d9ff', bd=1, relief = "flat")
+    canvasAddTask.place(x=200, y=50)
 
-    taskName = Entry(window)
-    taskName.grid(row=2, column=1,padx=(10,10))
+    createtaskLabel= Label(canvasAddTask, text="Criar Atividades", bg="#a3d9ff", font=("Verdana", 14))
+    createtaskLabel.place(x=10,y=10)
 
-    btnSubmitTask = Button(window, text="Submit", command=addTask)
-    btnSubmitTask.grid(row=3, column=1,padx=(10,10))
+    taskLabel= Label(canvasAddTask, text="Nome:", bg="#a3d9ff", font=("Verdana", 11))
+    taskLabel.place(x=10,y=50)
 
-    taskCategoryLabel = Label(window, text="Select a Category", bg="#a3d9ff")
-    taskCategoryLabel.grid(row=1, column=2, padx=(10,10))
+    taskName = Entry(canvasAddTask)
+    taskName.place(x=80,y=55)
 
-    taskCategoryDropdown = ttk.Combobox(window)
-    taskCategoryDropdown.grid(row=2, column=2, padx=(10,10))
+    btnSubmitTask = Button(canvasAddTask, text="Submit", width = 12, height= 1, font=("Verdana", 10), command=addTask)
+    btnSubmitTask.place(x=450,y=20)
 
-    btnAddTask = Button(window, width = 20, height= 2, text = "Enviar Tarefa", bd=1, fg='white', bg='#006BB8', relief = "raised",command=sendTask)
+    btnRemoveTask = Button(canvasAddTask, text="Remover", width = 12, height= 1, font=("Verdana", 10))
+    btnRemoveTask.place(x=450,y=70)
+
+    taskCategoryLabel = Label(canvasAddTask, text="Escolhe a categoria:", bg="#a3d9ff", font=("Verdana", 11))
+    taskCategoryLabel.place(x=10,y=100)
+
+    taskCategoryDropdown = ttk.Combobox(canvasAddTask)
+    taskCategoryDropdown.place(x=180,y=100)
+
+    btnAddTask = Button(canvasAddTask, width = 20, height= 2, text = "Enviar Tarefa", bd=1, fg='white', bg='#006BB8', relief = "raised",command=sendTask)
     btnAddTask.grid(row=1, column=3,padx=(10,10))
 
 
-    taskDate = Calendar(window, selectmode = "day",year=2022,month=1,date=1)
-    taskDate.grid(row=4, column=1, padx=(10,10))
+    """ taskDate = Calendar(window, selectmode = "day",year=2022,month=1,date=1)
+    taskDate.grid(row=4, column=1, padx=(10,10)) """
+
+    canvasTask = Canvas(window,  width = 645, height = 300, bg='#a3d9ff', bd=1, relief = "flat")
+    canvasTask.place(x=200,y=250)
+
+    treeTaskCreate = ttk.Treeview(canvasTask, height=14, column=("col1", "col2", "col3", "col4"))
+    treeTaskCreate.heading("#0", text="")
+    treeTaskCreate.heading("#1", text="Nome")
+    treeTaskCreate.heading("#2", text="Data")
+    treeTaskCreate.heading("#3", text="Categoria")
+    treeTaskCreate.heading("#4", text="Estado")
+
+    treeTaskCreate.column("#0", width=0)
+    treeTaskCreate.column("#1", width=200)
+    treeTaskCreate.column("#2", width=150)
+    treeTaskCreate.column("#3", width=150)
+    treeTaskCreate.column("#4", width=150)
+
+    treeTaskCreate.place(x=0, y=0)
 
 
     if os.path.exists("Files/category.txt"):
@@ -307,7 +336,7 @@ def addPersonalElements():
 
 #-----------------------------------Admin Menu---------------------------#
 def addManageElements():
-    global categoryLabel, categoryEntry, btnAddCategory, categoryBoxLabel, categoryDropdown, btnRemoveCategory, userLabel, userDropdown, btnRemoveUser, addUserLabel, usernameLabel, usernameEntry, passwordLabel, passwordEntry, emailLabel, emailEntry, userTypeLabel, userType, adminAddBtn
+    global categoryLabel, categoryEntry, btnAddCategory, categoryBoxLabel, categoryDropdown, btnRemoveCategory, userLabel, userDropdown, btnRemoveUser, addUserLabel, usernameLabel, usernameEntry, passwordLabel, passwordEntry, emailLabel, emailEntry, userTypeLabel, userType, adminAddBtn, canvasAddCategory, canvasaddUser, canvasRemoveUser,catLabel
     if currentUser == []:
         messagebox.showerror("No user is logged", "To view this you need to be logged in and have an admin account!")
     elif currentUser[1] == "admin":
@@ -315,54 +344,65 @@ def addManageElements():
             cleanElements()
         except:
             pass
-        categoryLabel = Label(window, text="What category do you wish to add?", bg="#a3d9ff")
-        categoryLabel.grid(row=1, column=1, padx=(10,10))
+        #Canvas Add Category
+        canvasAddCategory = Canvas(window,  width = 650, height = 150, bg='#a3d9ff', bd=1, relief = "flat")
+        canvasAddCategory.place(x=200, y=50)
 
-        categoryEntry = Entry(window)
-        categoryEntry.grid(row=2, column=1, padx=(10,10))
+        catLabel= Label(canvasAddCategory, text="Categorias", bg="#a3d9ff",font=("Verdana", 14))
+        catLabel.place(x=10,y=10)
 
-        btnAddCategory = Button(window, text="Submit", command=addCategory)
-        btnAddCategory.grid(row=3, column=1, padx=(10,10))
+        categoryLabel = Label(canvasAddCategory, text="Que categoria pretendes adicionar?", bg="#a3d9ff",font=("Verdana", 11))
+        categoryLabel.place(x=10,y=60)
 
-        categoryBoxLabel = Label(window, text="All categories", bg="#a3d9ff")
-        categoryBoxLabel.grid(row=1,column=2, padx=(10,10))
+        categoryEntry = Entry(canvasAddCategory)
+        categoryEntry.place(x=280,y=60)
 
-        categoryDropdown = ttk.Combobox(window)
-        categoryDropdown.grid(row=2, column=2, padx=(10,10))
+        btnAddCategory = Button(canvasAddCategory, text="Submit",font=("Verdana", 10), command=addCategory)
+        btnAddCategory.place(x=430,y=55)
 
-        btnRemoveCategory = Button(window, text="Remove Category", command=removeCategory)
-        btnRemoveCategory.grid(row=3, column=2, padx=(10,10))
+        categoryBoxLabel = Label(canvasAddCategory, text="Todas as Categorias", bg="#a3d9ff",font=("Verdana", 11))
+        categoryBoxLabel.place(x=10,y=110)
 
-        addUserLabel = Label(window, text="Add a new user:", bg="#a3d9ff")
-        addUserLabel.grid(row=4, column=1, padx=(10,10), pady=(10,10))
+        categoryDropdown = ttk.Combobox(canvasAddCategory)
+        categoryDropdown.place(x=180,y=110)
 
-        usernameLabel = Label(window, text="Username:", bg="#a3d9ff")
-        usernameLabel.grid(row=5, column=1, padx=(10,10))
+        btnRemoveCategory = Button(canvasAddCategory, text="Remove Category",font=("Verdana", 10), command=removeCategory)
+        btnRemoveCategory.place(x=430,y=105)
 
-        usernameEntry = Entry(window)
-        usernameEntry.grid(row=6, column=1, padx=(10,10))
+        #Canvas Add User
+        canvasaddUser = Canvas(window, width = 650, height = 150, bg='#a3d9ff', bd=1, relief = "flat")
+        canvasaddUser.place(x=200, y=255)
 
-        passwordLabel = Label(window, text="Password:", bg="#a3d9ff")
-        passwordLabel.grid(row=7, column=1, padx=(10,10))
+        addUserLabel = Label(canvasaddUser, text="Add a new user:", bg="#a3d9ff",font=("Verdana", 14))
+        addUserLabel.place(x=10,y=10)
 
-        passwordEntry = Entry(window, show="*")
-        passwordEntry.grid(row=8, column=1, padx=(10,10))
+        usernameLabel = Label(canvasaddUser, text="Username:", bg="#a3d9ff",font=("Verdana", 11))
+        usernameLabel.place(x=10,y=40)
 
-        emailLabel = Label(window, text="Email:", bg="#a3d9ff")
-        emailLabel.grid(row=9, column=1, padx=(10,10))
+        usernameEntry = Entry(canvasaddUser)
+        usernameEntry.place(x=110,y=40)
 
-        emailEntry = Entry(window)
-        emailEntry.grid(row=10, column=1, padx=(10,10))
+        passwordLabel = Label(canvasaddUser, text="Password:", bg="#a3d9ff",font=("Verdana", 11))
+        passwordLabel.place(x=310,y=40)
 
-        userTypeLabel = Label(window, text="User Type:", bg="#a3d9ff")
-        userTypeLabel.grid(row=11, column=1, padx=(10,10))
+        passwordEntry = Entry(canvasaddUser, show="*")
+        passwordEntry.place(x=410,y=40)
 
-        userType = ttk.Combobox(window, values=["normal", "admin"])
-        userType.grid(row=12, column=1, padx=(10,10))
+        emailLabel = Label(canvasaddUser, text="Email:", bg="#a3d9ff",font=("Verdana", 11))
+        emailLabel.place(x=10,y=80)
+
+        emailEntry = Entry(canvasaddUser)
+        emailEntry.place(x=110,y=80)
+
+        userTypeLabel = Label(canvasaddUser, text="User Type:", bg="#a3d9ff",font=("Verdana", 11))
+        userTypeLabel.place(x=310,y=80)
+
+        userType = ttk.Combobox(canvasaddUser, values=["normal", "admin"])
+        userType.place(x=410,y=80)
         userType.current(0)
 
-        adminAddBtn = Button(window, text="Add User", command=addUser)
-        adminAddBtn.grid(row=13, column=1, padx=(10,10))
+        adminAddBtn = Button(canvasaddUser, text="Add User",font=("Verdana", 10), command=addUser)
+        adminAddBtn.place(x=520,y=115)
             
             #verificar se o ficheiro existe
         if os.path.exists("Files/category.txt"):
@@ -371,13 +411,15 @@ def addManageElements():
                     #list compreension que vai fazer com que cada valor do dropdown seja a lita formada pelas categorias do ficheiro --> equivalente a "for category in categories:  categoryDropdown['values'] = category.strip()"
                 categoryDropdown['values'] = [category.strip() for category in categories]
                 categoryDropdown.current(0)
+        
+        canvasRemoveUser = Canvas(window, width = 650, height = 120, bg='#a3d9ff', bd=1, relief = "flat")
+        canvasRemoveUser.place(x=200, y=450)
 
-        userLabel = Label(window, text="Select a user to remove:", bg="#a3d9ff")
-        userLabel.grid(row=1, column=3, padx=(10,10))
+        userLabel = Label(canvasRemoveUser, text="Select a user to remove:", bg="#a3d9ff",font=("Verdana", 14))
+        userLabel.place(x=10, y=10)
 
-
-        userDropdown = ttk.Combobox(window)
-        userDropdown.grid(row=2, column=3, padx=(10,10))
+        userDropdown = ttk.Combobox(canvasRemoveUser)
+        userDropdown.place(x=10, y=70)
 
 
         if os.path.exists("Files/users.txt"):
@@ -386,8 +428,8 @@ def addManageElements():
                 userDropdown['values'] = [user.strip().split(';')[2] for user in users]
                 userDropdown.current(0)
 
-        btnRemoveUser = Button(window, text="Remove User", command=removeUser)
-        btnRemoveUser.grid(row=3, column=3, padx=(10,10))
+        btnRemoveUser = Button(canvasRemoveUser, text="Remove User",font=("Verdana", 10))
+        btnRemoveUser.place(x=200, y=65)
         
     else:
         messagebox.showerror("Access Denied", "Your account does not have admin access!")
@@ -489,7 +531,7 @@ def cleanElements():
     btnSubmitTask.destroy()
     taskCategoryDropdown.destroy()
     taskCategoryLabel.destroy()
-    taskDate.destroy()
+    #taskDate.destroy()
     btnAddTask.destroy()
     searchName.destroy()
     btnSearch.destroy()
@@ -512,17 +554,27 @@ def cleanElements():
     userTypeLabel.destroy() 
     userType.destroy() 
     adminAddBtn.destroy()
+    canvasAddCategory.destroy()
+    canvasRemoveUser.destroy()
+    canvasaddUser.destroy()
+    catLabel.destroy()
+    btnRemoveTask.destroy()
+    canvasTask.destroy()
+    createtaskLabel.destroy()
+    treeTaskCreate.destroy()
 #-----------------------------------MainScreen----------------------------#
 
-window.config(bg = '#a3d9ff')
+window.config(bg = '#FDF4E3')
 screenWidth = window.winfo_screenwidth()
 screenHeight = window.winfo_screenheight()
 
-appWidth = 800                             
-appHeight = 500
+appWidth = 900                             
+appHeight = 600
 x = (screenWidth/2) - (appWidth/2)        
 y = (screenHeight/2) - (appHeight/2)
 window.geometry("{:.0f}x{:.0f}+{:.0f}+{:.0f}" .format(appWidth, appHeight, int(x), int(y)))
+window.minsize(900, 600)
+window.maxsize(900, 600)
 
 #img = ImageTk.PhotoImage(Image.open("img\homepage.jpg"))
 
@@ -531,36 +583,37 @@ window.geometry("{:.0f}x{:.0f}+{:.0f}+{:.0f}" .format(appWidth, appHeight, int(x
 # btnNotificacao.place(x=450, y=0)
 
 # MainPage
-userLabel = Label(window, width = 5, height = 2, text = "", bg='#a3d9ff', fg="black")
-userLabel.grid(row=0, column=0)
+userLabel = Label(window, width = 5, height = 2, text = "", bg='#FDF4E3', fg="black", font=("Verdana", 10))
+userLabel.place(x=10, y=10)
 
-btnInciarSessao = Button(window, width = 20, height= 2, text = "Iniciar Sessões", bd=1,fg='white', bg='#006BB8', relief = "raised",command = login)
-btnInciarSessao.grid(row=0, column=1)
+btnInciarSessao = Button(window, width = 12, height= 2, text = "Iniciar Sessão", bd=1,fg='white', bg='#006BB8',font=("Verdana", 10), relief = "raised",command = login)
+btnInciarSessao.place(x=200, y=0)
 
-btnCriarConta = Button(window, width = 20, height= 2, text = "Criar Conta", bd=1, fg='white', bg='#006BB8', relief = "raised",command = register)
-btnCriarConta.grid(row=0, column=2)
+btnCriarConta = Button(window, width = 12, height= 2, text = "Criar Conta", bd=1, fg='white', bg='#006BB8',font=("Verdana", 10), relief = "raised",command = register)
+btnCriarConta.place(x=250, y=0)
 
-btnClearScreen = Button(window, width = 20, height=2, text = "Clear Screen", bd=1,fg='white', bg='#006BB8', relief = "raised",command = cleanElements)
-btnClearScreen.grid(row=0,column=3)
+btnClearScreen = Button(window, width = 12, height=2, text = "Clear Screen", bd=1,fg='white', bg='#006BB8',font=("Verdana", 10), relief = "raised",command = cleanElements)
+btnClearScreen.place(x=300, y=0)
+
 #Canvas com botões da esquerda
-btnCanvas = Canvas(window, width = 200, height = 460, bg='#7e6b8f', bd=0, relief = "flat")
-btnCanvas.grid(row=1, column=0, rowspan=40)
+btnCanvas = Canvas(window, width = 155, height = 610, bg='#FDF4E3', bd=1, relief = "flat",highlightthickness=2, highlightbackground="#00008B")
+btnCanvas.place(x=0, y=40)
 
-btnCriarTaref = Button(btnCanvas, width = 20, height= 5, text = "Criar Tarefa", bd=1, fg='white', bg='#006BB8', relief = "raised",command=addTaskElements)
-btnCriarTaref.place(x=30, y=50)
+btnCriarTaref = Button(btnCanvas, width = 15, height= 3, text = "Criar Tarefa", bd=1, fg='white', bg='#006BB8',font=("Verdana", 12),highlightthickness=2, highlightbackground="#00008B" , relief = "raised",command=addTaskElements)
+btnCriarTaref.place(x=1, y=2)
 
-btnPesquisa = Button(btnCanvas, width = 20, height= 5, text = "Pesquisa", bd=1, fg='white', bg='#006BB8', relief = "raised",command=addSearchElements )
-btnPesquisa.place(x=30, y=150)
+btnPesquisa = Button(btnCanvas, width = 15, height= 3, text = "Pesquisa", bd=1, fg='white', bg='#006BB8',font=("Verdana", 12), relief = "raised",command=addSearchElements )
+btnPesquisa.place(x=1, y=68)
 
-btnDashboard = Button(btnCanvas, width = 20, height= 5, text = "Área Pessoal", bd=1, fg='white', bg='#006BB8', relief = "raised", command=addPersonalElements)
-btnDashboard.place(x=30, y=250)
+btnDashboard = Button(btnCanvas, width = 15, height= 3, text = "Área Pessoal", bd=1, fg='white', bg='#006BB8',font=("Verdana", 12), relief = "raised", command=addPersonalElements)
+btnDashboard.place(x=1, y=134)
 
-btnGerirCat = Button(btnCanvas, width = 20, height= 5, text = "Gerir", bd=1, fg='white', bg='#006BB8', relief = "raised", command=addManageElements)
-btnGerirCat.place(x=30, y=350)
+btnGerirCat = Button(btnCanvas, width = 15, height= 3, text = "Gerir", bd=1, fg='white', bg='#006BB8',font=("Verdana", 12), relief = "raised", command=addManageElements)
+btnGerirCat.place(x=1, y=200)
 
-ImgCanvas = Canvas(window, width = 600, height = 455, bd=0, bg='#a3d9ff', relief = "flat")
-ImgCanvas.place(x=195, y=40)
-#ImgCanvas.create_image(10,250, image = img)
+""" ImgCanvas = Canvas(window, width = 600, height = 455, bd=0, bg='#a3d9ff', relief = "flat")
+ImgCanvas.place(x=195, y=40) """
+#ImgCanvas.create_image(10,250, image = '')
 
 
 

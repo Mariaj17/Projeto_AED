@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
-from tkcalendar import Calendar
+""" from tkcalendar import Calendar """
 from datetime import date
 
 window = Tk()
@@ -29,10 +29,10 @@ ano = current_date.year
 mes = current_date.month
 dia = current_date.day
 
-calendar = Calendar(window.panel_1, selectmode = 'day',year =ano, month = mes,day = dia, locale='pt_br')
+""" calendar = Calendar(window.panel_1, selectmode = 'day',year =ano, month = mes,day = dia, locale='pt_br')
 calendar.place(x=170, y=20)
 calendar.selection_clear()
- 
+  """
 def grad_date():
     lbl_date.config(text = "Dia selecionado: " + calendar.get_date())
 
@@ -54,7 +54,7 @@ nome_entry.place(x=450, y=50, width=350, height=20)
 lbl_categ = Label(window.panel_1, text="Categoria: ", font = ("Verdana", 10))
 lbl_categ.place(x=450, y=80)
 
-f = open("categorias.txt", "r", encoding="utf-8")
+f = open("files\category.txt", "r", encoding="utf-8")
 categ = f.readlines()
 f.close()
 categorias = ttk.Combobox(window.panel_1, values=categ, state="readonly")
