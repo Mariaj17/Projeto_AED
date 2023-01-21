@@ -296,11 +296,17 @@ def addSearchElements():
         cleanElements()
     except:
         pass
-    searchName = Entry(window)
-    searchName.grid(row=1, column=1)
+    # Canvas Pesquisa
+    canvasSearch = Canvas(window,  width = 650, height = 150, bg='#a3d9ff', bd=1, relief = "flat")
+    canvasSearch.place(x=200, y=50)
+
+    datefilterLabel = Label(window.panel_1, text="Data: ", font=('Verdana', 10))
+    datefilterLabel.place(x=20, y=20)
 
     btnSearch = Button(window, text="Submit", command=searchTask)
     btnSearch.grid(row=2, column=1)
+
+    
 
 
 def searchTask():
