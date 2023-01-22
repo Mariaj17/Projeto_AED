@@ -26,7 +26,53 @@ global userLabel
 
 currentUser = []
 #-----------------------------------Functions-----------------------------#
+# Calendário
+current_date = date.today()
+ano = current_date.year
+mes = current_date.month
+dia = current_date.day
 
+""" calendar = Calendar(window.panel_1, selectmode = 'day',year =ano, month = mes,day = dia, locale='pt_br')
+calendar.place(x=170, y=20)
+calendar.selection_clear()
+  """
+def grad_date():
+    lbl_date.config(text = "Dia selecionado: " + calendar.get_date())
+
+
+def limpar():
+    nome_entry.delete(0, END)
+    calendar.selection_clear()
+    lbl_date.config(text = "")
+    categorias.set("")
+    estados.set("")
+    
+
+
+def filtrar():
+    lista_tarefas.delete(*lista_tarefas.get_children())
+    f = open("tarefas.txt", "r", encoding="utf-8")
+    tarefas = f.readlines()
+    f.close()
+    tar = 0
+    for i in range (len(tarefas)):
+        campos = tarefas[i].split(";")
+        if nome_entry.get().upper() == campos[0].upper() or nome_entry.get() == "":
+            if calendar.get_date() == (campos[1].replace("-", "/")) or calendar.get_date() == "":
+                if campos[2] in categorias.get() or categorias.get() == "": 
+                    if estados.get() in campos[3] or estados.get() == "":
+                        lista_tarefas.insert("", "end", values=(campos[0],campos[1], campos[2], campos[3]))
+                        tar += 1
+    if tar == 0:
+        messagebox.showerror(title="Erro!", message="Não há tarefas com este filtro!")
+    if nome_entry.get() == "":
+        if calendar.get_date() == "":
+            if categorias.get() == "":
+                if estados.get() == "":
+                    messagebox.showinfo(title="Sem filtro", message="Nenhum filtro foi aplicado!")
+
+
+    limpar()
 
 #-----------------------------------Functions User -----------------------#
     #caso um utilizador logado desligue a pagina de forma forçada a aplicação ao inicializar vai colocar como falso o login de todos os users 
@@ -213,10 +259,10 @@ def addTaskElements():
     taskName = Entry(canvasAddTask)
     taskName.place(x=80,y=55)
 
-    btnSubmitTask = Button(canvasAddTask, text="Submeter", width = 12, height= 1, font=("Verdana", 10), command=addTask)
+    btnSubmitTask = Button(canvasAddTask, text="Submeter", width = 12, height= 1, bd=1, fg='white', bg='#006BB8', relief = "raised", font=("Verdana", 10), command=addTask)
     btnSubmitTask.place(x=540,y=20)
 
-    btnRemoveTask = Button(canvasAddTask, text="Remover", width = 12, height= 1, font=("Verdana", 10))
+    btnRemoveTask = Button(canvasAddTask, text="Remover", width = 12, height= 1, bd=1, fg='white', bg='#006BB8', relief = "raised", font=("Verdana", 10))
     btnRemoveTask.place(x=540,y=70)
 
     taskCategoryLabel = Label(canvasAddTask, text="Escolhe a categoria:", bg="#a3d9ff", font=("Verdana", 11))
@@ -226,7 +272,7 @@ def addTaskElements():
     taskCategoryDropdown.place(x=170,y=100)
 
     btnAddTask = Button(canvasAddTask, width = 12, height= 1, text = "Enviar Tarefa", font=("Verdana", 10), bd=1, fg='white', bg='#006BB8', relief = "raised",command=sendTask)
-    btnAddTask.place(x=50,y=120)
+    btnAddTask.place(x=540,y=120)
 
 
     """ taskDate = Calendar(window, selectmode = "day",year=2022,month=1,date=1)
@@ -292,7 +338,7 @@ def addTask():
 def createTree():
     treeTaskCreate.delete(*treeTaskCreate.get_children())
     if currentUser == []:
-        messagebox.showerror("Para poder vizualizar as suas tarefas por favor inicie a sessão.")
+        messagebox.showerror("Sessão não iniciada","Para poder vizualizar as suas tarefas por favor inicie a sessão.")
         return
     f = open("files/tasksDoing.txt", "r", encoding="utf-8")
     ficheiro = f.readlines()
@@ -368,10 +414,10 @@ def addSearchElements():
     lbl_filtro.place(x=10, y=10)
 
     # Button e Label get data
-    btn_getDate = Button(canvasSearch, text = "Ver dia selecionado", width = 12, height= 1, bd=1, fg='white', bg='#006BB8', relief = "raised", font=("Verdana", 10),command = grad_date)
+    btn_getDate = Button(canvasSearch, text = "Ver dia selecionado", width = 16, height= 1, bd=1, fg='white', bg='#006BB8', relief = "raised", font=("Verdana", 10),command = grad_date)
     btn_getDate.place(x=10, y= 170)
 
-    lbl_date = Label(canvasSearch, text = "", bg='#000000', font = ("Verdana", 7))
+    lbl_date = Label(canvasSearch, text = "", bg='#a3d9ff', font = ("Verdana", 7))
     lbl_date.place(x=50, y=10)
 
     """ calendar = Calendar(window.panel_1, selectmode = 'day',year =ano, month = mes,day = dia, locale='pt_br')
@@ -381,29 +427,29 @@ def addSearchElements():
 
     # Nome
     lbl_nome = Label(canvasSearch, text="Nome: ", bg='#a3d9ff', font = ("Verdana",10))
-    lbl_nome.place(x=180, y=30)
+    lbl_nome.place(x=190, y=30)
 
     nome_entry = Entry(canvasSearch)
-    nome_entry.place(x=230, y=30)
+    nome_entry.place(x=240, y=30)
 
     # Categoria
     lbl_categ = Label(canvasSearch, text="Categoria: ", bg='#a3d9ff', font = ("Verdana", 10))
-    lbl_categ.place(x=180, y=80)
+    lbl_categ.place(x=190, y=80)
 
     f = open("files\category.txt", "r", encoding="utf-8")
     categ = f.readlines()
     f.close()
 
     categorias = ttk.Combobox(canvasSearch, values=categ, state="readonly")
-    categorias.place(x = 260, y = 80)
+    categorias.place(x = 270, y = 80)
 
     # Estado
     lbl_estado = Label(canvasSearch, text="Estado: ", bg='#a3d9ff', font = ("Verdana", 10))
-    lbl_estado.place(x=180, y= 130)
+    lbl_estado.place(x=190, y= 130)
 
     est = ['Feito', 'Por fazer', 'Fazendo']
     estados = ttk.Combobox(canvasSearch, values=est, state="readonly")
-    estados.place(x = 240, y = 130)
+    estados.place(x = 250, y = 130)
 
     # Button limpar
     btn_limpar = Button(canvasSearch, text="Limpar", width = 12, height= 1, bd=1, fg='white', bg='#006BB8', relief = "raised", font=("Verdana", 10), command=limpar)
@@ -440,9 +486,22 @@ def addSearchElements():
     searchValue = searchName.get()
     print(searchValue) """
 #---------------------------------------- Personal Area------------------#
+def selectionPorFazer():
+    indice = lboxPorFazer.curselection()   
+    textPorFazer = lboxPorFazer.get(indice)       
+
+
+def selectionFazendo():
+    indice = lboxFazendo.curselection()   
+    textFazendo = lboxFazendo.get(indice)      
+
+def selectionFeito():
+    indice = lboxFazendo.curselection()  
+    textFeito = lboxFazendo.get(indice)
+
+
 def addPersonalElements():
-    global taskButtons
-    taskButtons = []
+    global canvasDashBoard, dashLabel, state, rdPorfazer, rdFazendo, rdFeito, btnState, canvasKaban, PorFazerLabel, FazendoLabel, FeitoLabel, lboxPorFazer, lboxFazendo, lboxFeito
     try:
         cleanElements()
     except:
@@ -450,7 +509,52 @@ def addPersonalElements():
     if currentUser == []:
         messagebox.showerror("No user is logged", "Para ver isto tem que iniciar a sessão e ter uma conta admin!")
         return
-    if os.path.exists("Files/tasksNotDone.txt"):
+    #Canvas Dashboard
+    canvasDashBoard = Canvas(window,  width = 200, height = 200, bg='#a3d9ff', bd=1, relief = "flat")
+    canvasDashBoard.place(x=650, y=50)
+
+    dashLabel= Label(canvasDashBoard, text="Mudar Estado", bg="#a3d9ff", font=("Verdana", 14))
+    dashLabel.place(x=10,y=10)
+
+    state = StringVar()
+    state.set("Por fazer")   
+    rdPorfazer = Radiobutton(canvasDashBoard, text = "Por Fazer", bg="#a3d9ff", font=("Verdana", 11), value = "Por Fazer", variable = state)
+    rdPorfazer.place(x=10, y=60)
+    rdFazendo = Radiobutton(canvasDashBoard, text = "Fazendo", bg="#a3d9ff", font=("Verdana", 11), value = "Fazendo", variable = state)
+    rdFazendo.place(x=10, y=90)
+    rdFeito = Radiobutton(canvasDashBoard, text = "Feito", bg="#a3d9ff", font=("Verdana", 11), value = "Feito", variable = state)
+    rdFeito.place(x=10, y=120)
+
+    btnState = Button(canvasDashBoard, text="Mudar Estado", width = 15, height= 1, bd=1, fg='white', bg='#006BB8', relief = "raised", font=("Verdana", 10))
+    btnState.place(x=40, y=160)
+
+
+    #Canvas Kaban
+    canvasKaban = Canvas(window, width = 450, height = 505, bg='#a3d9ff', bd=1, relief = "flat")
+    canvasKaban.place(x=200,y=50)
+
+    PorFazerLabel= Label(canvasKaban, width = 17, height = 2, text="Por Fazer", bg="#E03C32", font=("Verdana", 11))
+    PorFazerLabel.place(x=0,y=0)
+
+    FazendoLabel= Label(canvasKaban, width = 17, height = 2, text="Fazendo", bg="#FFD301", font=("Verdana", 11))
+    FazendoLabel.place(x=150,y=0)
+
+    FeitoLabel= Label(canvasKaban, width = 17, height = 2, text="Feito", bg="#7BB662", font=("Verdana", 11))
+    FeitoLabel.place(x=300,y=0)
+
+    lboxPorFazer=Listbox(canvasKaban, width=25, height=29, selectmode='single', selectbackground='red')
+    lboxPorFazer.place(x=0,y=40)
+    lboxPorFazer.bind("<<Listbox Select>>", selectionPorFazer)
+
+    lboxFazendo=Listbox(canvasKaban, width=25, height=29, selectmode='single', selectbackground='red')
+    lboxFazendo.place(x=150,y=40)
+    lboxFazendo.bind("<<Listbox Select>>", selectionFazendo)
+
+    lboxFeito=Listbox(canvasKaban, width=25, height=29, selectmode='single', selectbackground='red')
+    lboxFeito.place(x=300,y=40)
+    lboxFeito.bind("<<Listbox Select>>", selectionFeito)
+
+    """ if os.path.exists("Files/tasksNotDone.txt"):
         i = 1
         with open("Files/tasksNotDone.txt", "r") as file:
             for line in file:
@@ -462,7 +566,7 @@ def addPersonalElements():
                         taskButton.grid(row=i+j, column=1)
                         taskButtons.append(taskButton)
     else:
-        messagebox.showerror("No task", "Não há tarefas")
+        messagebox.showerror("No task", "Não há tarefas") """
 
     
 
@@ -492,16 +596,16 @@ def addManageElements():
         categoryEntry = Entry(canvasAddCategory)
         categoryEntry.place(x=280,y=60)
 
-        btnAddCategory = Button(canvasAddCategory, text="Submeter",font=("Verdana", 10), command=addCategory)
+        btnAddCategory = Button(canvasAddCategory, text="Adicionar", width = 12, height= 1, bd=1, fg='white', bg='#006BB8', relief = "raised",font=("Verdana", 10), command=addCategory)
         btnAddCategory.place(x=430,y=55)
 
         categoryBoxLabel = Label(canvasAddCategory, text="Todas as Categorias", bg="#a3d9ff",font=("Verdana", 11))
         categoryBoxLabel.place(x=10,y=110)
 
         categoryDropdown = ttk.Combobox(canvasAddCategory)
-        categoryDropdown.place(x=180,y=110)
+        categoryDropdown.place(x=200,y=110)
 
-        btnRemoveCategory = Button(canvasAddCategory, text="Remover Categoria",font=("Verdana", 10), command=removeCategory)
+        btnRemoveCategory = Button(canvasAddCategory, text="Remover", width = 12, height= 1, bd=1, fg='white', bg='#006BB8', relief = "raised",font=("Verdana", 10), command=removeCategory)
         btnRemoveCategory.place(x=430,y=105)
 
         #Canvas Add User
@@ -536,7 +640,7 @@ def addManageElements():
         userType.place(x=410,y=80)
         userType.current(0)
 
-        adminAddBtn = Button(canvasaddUser, text="Adicionar utilizador",font=("Verdana", 10), command=addUser)
+        adminAddBtn = Button(canvasaddUser, text="Adicionar", width = 12, height= 1, bd=1, fg='white', bg='#006BB8', relief = "raised",font=("Verdana", 10), command=addUser)
         adminAddBtn.place(x=520,y=115)
             
             #verificar se o ficheiro existe
@@ -563,7 +667,7 @@ def addManageElements():
                 userDropdown['values'] = [user.strip().split(';')[2] for user in users]
                 userDropdown.current(0)
 
-        btnRemoveUser = Button(canvasRemoveUser, text="Remover Utilizador",font=("Verdana", 10), command=removeUser)
+        btnRemoveUser = Button(canvasRemoveUser, text="Remover", width = 12, height= 1, bd=1, fg='white', bg='#006BB8', relief = "raised",font=("Verdana", 10), command=removeUser)
         btnRemoveUser.place(x=200, y=65)
         
     else:
@@ -659,16 +763,13 @@ def addUser():
 #-----------------------------------Clean Tkinter elements------------------------#
     #esta função limpa os elementos tkinter de cada aba da pagina
 def cleanElements():
-    for button in taskButtons:
-        button.destroy()
     taskLabel.destroy()
     taskName.destroy()
     btnSubmitTask.destroy()
     taskCategoryDropdown.destroy()
     taskCategoryLabel.destroy()
     #taskDate.destroy()
-    btnAddTask.destroy()
-    categoryLabel.destroy()
+    btnAddTask.destroy()     
     categoryEntry.destroy()
     btnAddCategory.destroy()
     categoryBoxLabel.destroy() 
@@ -702,14 +803,26 @@ def cleanElements():
     lbl_nome.destroy()
     nome_entry.destroy()
     lbl_categ.destroy()
-    categorias.destroy()
     lbl_estado.destroy()
-    estados.destroy()
     btn_limpar.destroy()
     btn_filtrar.destroy()
     lista_tarefas.destroy()
     canvaslista.destroy()
-    #calendar.destroy()
+    #calendar.destroy()   
+    canvasDashBoard.destroy()
+    dashLabel.destroy()
+    rdPorfazer.destroy()   
+    rdFazendo.destroy()
+    rdFeito.destroy()
+    btnState.destroy()
+    canvasKaban.destroy()
+    PorFazerLabel.destroy()
+    FazendoLabel.destroy()
+    FeitoLabel.destroy()
+    lboxPorFazer.destroy()
+    lboxFazendo.destroy()
+    lboxFeito.destroy()
+    categoryLabel.destroy()  
 
 #-----------------------------------MainScreen----------------------------#
 
