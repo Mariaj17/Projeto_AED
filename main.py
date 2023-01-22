@@ -7,6 +7,7 @@ from users import *
 import utils
 from pesquisa import *
 from pip import *
+from tarefas import*
 """ from tkcalendar import Calendar """
 
 
@@ -248,6 +249,7 @@ def addTaskElements():
     treeTaskCreate.column("#4", width=150)
 
     treeTaskCreate.place(x=0, y=0)
+    createTree()
 
 
     if os.path.exists("Files/category.txt"):
@@ -284,7 +286,37 @@ def addTask():
     with open("Files/tasksDone.txt", "w") as file:
         file.write(f"{currentUser[0]};{categoryValue};\n")
 
+def createTree():
+    treeTaskCreate.delete(*treeTaskCreate.get_children())
+    if currentUser == []:
+        messagebox.showerror("Para poder vizualizar as suas tarefas por favor inicie a sessão.")
+        return
+    f = open("files/tasksDoing.txt", "r", encoding="utf-8")
+    ficheiro = f.readlines()
+    f.close()
+    for linha in ficheiro:
+        campos=linha.split(";")
+        for i in range(currentUser):
+            if (currentUser[i]==campos[0]):
+                treeTaskCreate.insert("", "end", values=(campos[1], campos[2], campos[3],campos[4]))
 
+    f = open("file/tasksDone.txt", "r", encoding="utf-8")
+    ficheiro = f.readlines()
+    f.close()
+    for linha in ficheiro:
+        campos=linha.split(";")
+        for i in range(currentUser):
+            if (currentUser[i]==campos[0]):
+                treeTaskCreate.insert("", "end", values=(campos[1], campos[2], campos[3],campos[4]))
+
+    f = open("files/tasksNotDone.txt", "r", encoding="utf-8")
+    ficheiro = f.readlines()
+    f.close()
+    for linha in ficheiro:
+        campos=linha.split(";")
+        for i in range(currentUser):
+            if (currentUser[i]==campos[0]):
+                treeTaskCreate.insert("", "end", values=(campos[1], campos[2], campos[3],campos[4]))
 
 
 
