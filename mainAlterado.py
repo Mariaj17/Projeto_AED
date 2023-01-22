@@ -232,7 +232,7 @@ def addTaskElements():
     taskCategoryLabel = Label(canvasAddTask, text="Categoria: ", bg='#a3d9ff', font = ("Verdana", 8))
     taskCategoryLabel.place(x=315, y=80)
 
-    f = open("files\category.txt", "r", encoding="utf-8")
+    f = open("Files\category.txt", "r", encoding="utf-8")
     categ = f.readlines()
     f.close()
 
@@ -433,7 +433,7 @@ def addSearchElements():
     lbl_categ = Label(canvasSearch, text="Categoria: ", bg='#a3d9ff', font = ("Verdana", 8))
     lbl_categ.place(x=315, y=80)
 
-    f = open("files\category.txt", "r", encoding="utf-8")
+    f = open("Files\category.txt", "r", encoding="utf-8")
     categ = f.readlines()
     f.close()
 
