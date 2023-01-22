@@ -16,7 +16,7 @@ def insertCategory():
     f.close()
 
 pasta='files'
-fcategoria ='files/categorias.txt'
+fcategoria ='files/category.txt'
 
 if not os.path.exists(pasta):
     os.mkdir(pasta)
