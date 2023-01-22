@@ -7,7 +7,6 @@ from users import *
 import utils
 from pesquisa import *
 from pip import *
-from tarefas import*
 """ from tkcalendar import Calendar """
 
 
