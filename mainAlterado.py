@@ -482,8 +482,7 @@ def grad_date2():
     print(searchValue) """
 #---------------------------------------- Personal Area------------------#
 def addPersonalElements():
-    global taskButtons
-    taskButtons = []
+    global canvasDashBoard, dashLabel, state, rdPorfazer, rdFazendo, rdFeito, btnState, canvasKaban, PorFazerLabel, FazendoLabel, FeitoLabel, lboxPorFazer, lboxFazendo, lboxFeito
     try:
         cleanElements()
     except:
@@ -491,7 +490,52 @@ def addPersonalElements():
     if currentUser == []:
         messagebox.showerror("No user is logged", "Para ver isto tem que iniciar a sessão e ter uma conta admin!")
         return
-    if os.path.exists("Files/tasksNotDone.txt"):
+    #Canvas Dashboard
+    canvasDashBoard = Canvas(window,  width = 200, height = 200, bg='#a3d9ff', bd=1, relief = "flat")
+    canvasDashBoard.place(x=650, y=50)
+
+    dashLabel= Label(canvasDashBoard, text="Mudar Estado", bg="#a3d9ff", font=("Verdana", 14))
+    dashLabel.place(x=10,y=10)
+
+    state = StringVar()
+    state.set("Por fazer")   
+    rdPorfazer = Radiobutton(canvasDashBoard, text = "Por Fazer", bg="#a3d9ff", font=("Verdana", 11), value = "Por Fazer", variable = state)
+    rdPorfazer.place(x=10, y=60)
+    rdFazendo = Radiobutton(canvasDashBoard, text = "Fazendo", bg="#a3d9ff", font=("Verdana", 11), value = "Fazendo", variable = state)
+    rdFazendo.place(x=10, y=90)
+    rdFeito = Radiobutton(canvasDashBoard, text = "Feito", bg="#a3d9ff", font=("Verdana", 11), value = "Feito", variable = state)
+    rdFeito.place(x=10, y=120)
+
+    btnState = Button(canvasDashBoard, text="Mudar Estado", width = 15, height= 1, bd=1, fg='white', bg='#006BB8', relief = "raised", font=("Verdana", 10))
+    btnState.place(x=40, y=160)
+
+
+    #Canvas Kaban
+    canvasKaban = Canvas(window, width = 450, height = 505, bg='#a3d9ff', bd=1, relief = "flat")
+    canvasKaban.place(x=200,y=50)
+
+    PorFazerLabel= Label(canvasKaban, width = 17, height = 2, text="Por Fazer", bg="#E03C32", font=("Verdana", 11))
+    PorFazerLabel.place(x=0,y=0)
+
+    FazendoLabel= Label(canvasKaban, width = 17, height = 2, text="Fazendo", bg="#FFD301", font=("Verdana", 11))
+    FazendoLabel.place(x=150,y=0)
+
+    FeitoLabel= Label(canvasKaban, width = 17, height = 2, text="Feito", bg="#7BB662", font=("Verdana", 11))
+    FeitoLabel.place(x=300,y=0)
+
+    lboxPorFazer=Listbox(canvasKaban, width=25, height=29, selectmode='single', selectbackground='red')
+    lboxPorFazer.place(x=0,y=40)
+    lboxPorFazer.bind("<<Listbox Select>>", selectionPorFazer)
+
+    lboxFazendo=Listbox(canvasKaban, width=25, height=29, selectmode='single', selectbackground='red')
+    lboxFazendo.place(x=150,y=40)
+    lboxFazendo.bind("<<Listbox Select>>", selectionFazendo)
+
+    lboxFeito=Listbox(canvasKaban, width=25, height=29, selectmode='single', selectbackground='red')
+    lboxFeito.place(x=300,y=40)
+    lboxFeito.bind("<<Listbox Select>>", selectionFeito)
+
+    """ if os.path.exists("Files/tasksNotDone.txt"):
         i = 1
         with open("Files/tasksNotDone.txt", "r") as file:
             for line in file:
@@ -503,7 +547,20 @@ def addPersonalElements():
                         taskButton.grid(row=i+j, column=1)
                         taskButtons.append(taskButton)
     else:
-        messagebox.showerror("No task", "Não há tarefas")
+        messagebox.showerror("No task", "Não há tarefas") """
+
+def selectionPorFazer():
+    indice = lboxPorFazer.curselection()   
+    textPorFazer = lboxPorFazer.get(indice)       
+
+
+def selectionFazendo():
+    indice = lboxFazendo.curselection()   
+    textFazendo = lboxFazendo.get(indice)      
+
+def selectionFeito():
+    indice = lboxFazendo.curselection()  
+    textFeito = lboxFazendo.get(indice)
 
     
 
