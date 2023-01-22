@@ -321,8 +321,8 @@ def createTree():
             if (currentUser[i]==campos[0]):
                 treeTaskCreate.insert("", "end", values=(campos[1], campos[2], campos[3],campos[4]))
 
-def removetask():
-    selected_item = treeTaskCreate.selection()[0] ## get selected item
+def removetask():   #A função a cima é a renderização da treeview
+    selected_item = treeTaskCreate.selection()[0] ## get selected item  #esta tree esta no addTaskElements
 
     f = open("files/tasksDoing.txt", "r", encoding="utf-8")
     ficheiro = f.readlines()
