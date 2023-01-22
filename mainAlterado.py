@@ -201,7 +201,7 @@ def login():
 
 #-----------------------------------Criar Tarefa--------------------------#
 def addTaskElements():
-    global taskLabel, taskName, btnSubmitTask, btnAddTask, taskCategoryDropdown, taskCategoryLabel, canvasAddTask, btnRemoveTask,btn_getDate,lbl_date, canvasTask, createtaskLabel,treeTaskCreate, taskDate
+    global taskLabel, taskName, btnSubmitTask, btnAddTask, taskCategoryDropdown, taskEstadoDropdown, taskCategoryLabel, canvasAddTask, btnRemoveTask,btn_getDate,lbl_date, canvasTask, createtaskLabel,treeTaskCreate, taskDate
     try:
         cleanElements()
     except:
@@ -221,14 +221,6 @@ def addTaskElements():
     taskDate.place(x=60, y=10)
     taskDate.selection_clear()
 
-
-    # Button e Label get data
-    btn_getDate = Button(canvasAddTask, text = "Ver dia selecionado", width = 17, height= 1, bd=1, fg='white', bg='#006BB8', relief = "raised", font=("Verdana", 10),command = grad_date2)
-    btn_getDate.place(x=315, y= 170)
-
-    lbl_date = Label(canvasAddTask, text = "",bg='#a3d9ff', font = ("Verdana", 7))
-    lbl_date.place(x=465, y=175)
-
     # Nome
     taskLabel = Label(canvasAddTask, text="Nome: ", bg='#a3d9ff', font = ("Verdana",8))
     taskLabel.place(x=315, y=30)
@@ -247,9 +239,16 @@ def addTaskElements():
     taskCategoryDropdown = ttk.Combobox(canvasAddTask, values=categ, state="readonly")
     taskCategoryDropdown.place(x =378, y = 80)
 
-    #Button Enviar Tarefa
-    btnAddTask = Button(canvasAddTask, width = 12, height= 1, text = "Enviar Tarefa", font=("Verdana", 10), bd=1, fg='white', bg='#006BB8', relief = "raised",command=sendTask)
-    btnAddTask.place(x=315,y=120)
+    # Estado
+    taskEstadoLabel = Label(canvasAddTask, text="Estado: ", bg='#a3d9ff', font = ("Verdana", 8))
+    taskEstadoLabel.place(x=315, y=130)
+
+    f = open("Files/estados.txt", "r", encoding="utf-8")
+    est = f.readlines()
+    f.close()
+
+    taskEstadoDropdown = ttk.Combobox(canvasAddTask, values=est, state="readonly")
+    taskEstadoDropdown.place(x =378, y = 130)
 
 
     # Botões Submeter e Remover
@@ -258,6 +257,10 @@ def addTaskElements():
 
     btnRemoveTask = Button(canvasAddTask, text="Remover", width = 12, height= 1, font=("Verdana", 10))
     btnRemoveTask.place(x=540,y=70)
+
+    #Button Enviar Tarefa
+    btnAddTask = Button(canvasAddTask, width = 12, height= 1, text = "Enviar Tarefa", font=("Verdana", 10), bd=1, fg='white', bg='#006BB8', relief = "raised",command=sendTask)
+    btnAddTask.place(x=540,y=170)
 
     canvasTask = Canvas(window,  width = 645, height = 300, bg='#a3d9ff', bd=1, relief = "flat")
     canvasTask.place(x=200,y=250)
@@ -278,23 +281,27 @@ def addTaskElements():
     treeTaskCreate.place(x=0, y=0)
 
 
-    if os.path.exists("Files/category.txt"):
-            with open("Files/category.txt", "r") as file:
-                categories = file.readlines()
-                    #list compreension que vai fazer com que cada valor do dropdown seja a lita formada pelas categorias do ficheiro --> equivalente a "for category in categories:  categoryDropdown['values'] = category.strip()"
-                taskCategoryDropdown['values'] = [category.strip() for category in categories]
-                taskCategoryDropdown.current(0)
-
-
-
 def addTask():
-    taskValue = taskName.get()
-    categoryValue = taskCategoryDropdown.get()
-    selectedDate = taskDate.get_date()
     if currentUser == []:
         messagebox.showerror("No user is logged in", "Por favor inicie a sessão para adicionar a tarefa.")
         return
-    if not os.path.exists("Files/tasksNotDone.txt"):
+    taskValue = taskName.get()
+    categoryValue = taskCategoryDropdown.get()
+    selectedDate = taskDate.get_date()
+    estadoValue = taskEstadoDropdown.get()
+    newTask = taskValue + ";" + categoryValue[0:len(categoryValue)-1] + ";" + selectedDate + ";" + estadoValue[0:len(estadoValue)-1] + ";" + "\n"
+    f = open("Files/newTask.txt", "a", encoding="utf-8")
+    f.write(newTask)
+    f.close()
+    f = open("Files/newTask.txt", "r", encoding="utf-8")
+    addNewTaskTree = f.readlines()
+    f.close()
+    treeTaskCreate.delete(*treeTaskCreate.get_children())
+    for i in range (len(addNewTaskTree)):
+        campos = addNewTaskTree[i].split(";")
+        treeTaskCreate.insert("", "end", values=(campos[0],campos[1], campos[2], campos[3]))
+    
+    """ if not os.path.exists("Files/tasksNotDone.txt"):
         open("Files/tasksNotDone.txt", "w").close()
     with open("Files/tasksNotDone.txt", "r") as file:
         tasks = file.readlines()
@@ -308,11 +315,11 @@ def addTask():
                     file.writelines(tasks)
                 return
     with open("Files/tasksNotDone.txt", "a") as file:
-        file.write(f"{currentUser[0]};{categoryValue};[{taskValue},{selectedDate}]\n")
+        file.write(f"{newTask}\n")
     with open("Files/tasksDoing.txt", "w") as file:
         file.write(f"{currentUser[0]};{categoryValue};\n")
     with open("Files/tasksDone.txt", "w") as file:
-        file.write(f"{currentUser[0]};{categoryValue};\n")
+        file.write(f"{currentUser[0]};{categoryValue};\n") """
 
 
 #-----------------------------------pesquisa------------------------------#
