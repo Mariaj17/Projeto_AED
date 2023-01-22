@@ -3,7 +3,7 @@ from tkinter import ttk
 from tkinter import messagebox
 """ from tkcalendar import Calendar """
 from datetime import date
-from main import *
+""" from main import * """
 
 
 # Calendário

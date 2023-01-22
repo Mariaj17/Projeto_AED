@@ -7,7 +7,7 @@ from users import *
 import utils
 from pesquisa import *
 from pip import *
-from tkcalendar import Calendar
+""" from tkcalendar import Calendar """
 
 
 global window
@@ -201,7 +201,7 @@ def login():
 
 #-----------------------------------Criar Tarefa--------------------------#
 def addTaskElements():
-    global taskLabel, taskName, btnSubmitTask, btnAddTask, taskCategoryDropdown, taskEstadoDropdown, taskCategoryLabel, canvasAddTask, btnRemoveTask,btn_getDate,lbl_date, canvasTask, createtaskLabel,treeTaskCreate, taskDate
+    global taskLabel, taskName, btnSubmitTask, btnAddTask, taskCategoryDropdown, taskEstadoDropdown, taskCategoryLabel, canvasAddTask, btnRemoveTask,btn_getDate,lbl_date, canvasTask,treeTaskCreate, taskDate
     try:
         cleanElements()
     except:
@@ -285,11 +285,12 @@ def addTask():
     if currentUser == []:
         messagebox.showerror("No user is logged in", "Por favor inicie a sessão para adicionar a tarefa.")
         return
+    uservalue = currentUser[0]
     taskValue = taskName.get()
     categoryValue = taskCategoryDropdown.get()
     selectedDate = taskDate.get_date()
     estadoValue = taskEstadoDropdown.get()
-    newTask = taskValue + ";" + categoryValue[0:len(categoryValue)-1] + ";" + selectedDate + ";" + estadoValue[0:len(estadoValue)-1] + ";" + "\n"
+    newTask = uservalue + ";" + taskValue + ";" + categoryValue[0:len(categoryValue)-1] + ";" + selectedDate + ";" + estadoValue[0:len(estadoValue)-1] + ";" + "\n"
     f = open("Files/newTask.txt", "a", encoding="utf-8")
     f.write(newTask)
     f.close()
@@ -299,27 +300,8 @@ def addTask():
     treeTaskCreate.delete(*treeTaskCreate.get_children())
     for i in range (len(addNewTaskTree)):
         campos = addNewTaskTree[i].split(";")
-        treeTaskCreate.insert("", "end", values=(campos[0],campos[1], campos[2], campos[3]))
+        treeTaskCreate.insert("", "end", values=(campos[1],campos[2], campos[3], campos[4]))
     
-    """ if not os.path.exists("Files/tasksNotDone.txt"):
-        open("Files/tasksNotDone.txt", "w").close()
-    with open("Files/tasksNotDone.txt", "r") as file:
-        tasks = file.readlines()
-        for i, line in enumerate(tasks):
-            if currentUser[0] in line:
-                if taskValue in line:
-                    messagebox.showerror("Task already exists", "Essa tarefa já existe.")
-                    return
-                tasks[i] = line.rstrip() + f";[{taskValue},{selectedDate}]\n"
-                with open("Files/tasksNotDone.txt", "w") as file:
-                    file.writelines(tasks)
-                return
-    with open("Files/tasksNotDone.txt", "a") as file:
-        file.write(f"{newTask}\n")
-    with open("Files/tasksDoing.txt", "w") as file:
-        file.write(f"{currentUser[0]};{categoryValue};\n")
-    with open("Files/tasksDone.txt", "w") as file:
-        file.write(f"{currentUser[0]};{categoryValue};\n") """
 
 
 #-----------------------------------pesquisa------------------------------#
@@ -494,6 +476,7 @@ def addPersonalElements():
         cleanElements()
     except:
         pass
+    print('sim')
     if currentUser == []:
         messagebox.showerror("No user is logged", "Para ver isto tem que iniciar a sessão e ter uma conta admin!")
         return
@@ -506,14 +489,14 @@ def addPersonalElements():
 
     state = StringVar()
     state.set("Por fazer")   
-    rdPorfazer = Radiobutton(canvasDashBoard, text = "Por Fazer", bg="#a3d9ff", font=("Verdana", 11), value = "Por Fazer", variable = state)
+    rdPorfazer = Radiobutton(canvasDashBoard, text = "Por Fazer", bg="#a3d9ff", font=("Verdana", 11), value = "Por fazer", variable = state)
     rdPorfazer.place(x=10, y=60)
     rdFazendo = Radiobutton(canvasDashBoard, text = "Fazendo", bg="#a3d9ff", font=("Verdana", 11), value = "Fazendo", variable = state)
     rdFazendo.place(x=10, y=90)
     rdFeito = Radiobutton(canvasDashBoard, text = "Feito", bg="#a3d9ff", font=("Verdana", 11), value = "Feito", variable = state)
     rdFeito.place(x=10, y=120)
 
-    btnState = Button(canvasDashBoard, text="Mudar Estado", width = 15, height= 1, bd=1, fg='white', bg='#006BB8', relief = "raised", font=("Verdana", 10))
+    btnState = Button(canvasDashBoard, text="Mudar Estado", width = 15, height= 1, bd=1, fg='white', bg='#006BB8', relief = "raised", font=("Verdana", 10), command=changeState)
     btnState.place(x=40, y=160)
 
 
@@ -530,31 +513,23 @@ def addPersonalElements():
     FeitoLabel= Label(canvasKaban, width = 17, height = 2, text="Feito", bg="#7BB662", font=("Verdana", 11))
     FeitoLabel.place(x=300,y=0)
 
+    
     lboxPorFazer=Listbox(canvasKaban, width=25, height=29, selectmode='single', selectbackground='red')
     lboxPorFazer.place(x=0,y=40)
     lboxPorFazer.bind("<<Listbox Select>>", selectionPorFazer)
+    renderLBoxPorFazer()
 
-    lboxFazendo=Listbox(canvasKaban, width=25, height=29, selectmode='single', selectbackground='red')
+
+    lboxFazendo=Listbox(canvasKaban, width=25, height=29, selectmode='single', selectbackground='yellow')
     lboxFazendo.place(x=150,y=40)
     lboxFazendo.bind("<<Listbox Select>>", selectionFazendo)
+    renderLBoxFazendo()
 
-    lboxFeito=Listbox(canvasKaban, width=25, height=29, selectmode='single', selectbackground='red')
+    lboxFeito=Listbox(canvasKaban, width=25, height=29, selectmode='single', selectbackground='green')
     lboxFeito.place(x=300,y=40)
     lboxFeito.bind("<<Listbox Select>>", selectionFeito)
+    renderLBoxPorFeito()
 
-    """ if os.path.exists("Files/tasksNotDone.txt"):
-        i = 1
-        with open("Files/tasksNotDone.txt", "r") as file:
-            for line in file:
-                userTask = line.strip().split(";")
-                if currentUser[0] == userTask[0]:
-                    task_list = userTask[2:]
-                    for j, task in enumerate(task_list):
-                        taskButton = Button(window, text=task[1:-1])
-                        taskButton.grid(row=i+j, column=1)
-                        taskButtons.append(taskButton)
-    else:
-        messagebox.showerror("No task", "Não há tarefas") """
 
 def selectionPorFazer():
     indice = lboxPorFazer.curselection()   
@@ -571,6 +546,76 @@ def selectionFeito():
 
     
 
+def renderLBoxPorFazer():
+    f = open("Files/newTask.txt", "r", encoding="utf-8")
+    task = f.readlines()
+    f.close()
+    for linha in task:
+        campos = linha.split(";")
+        if(campos[0]==currentUser[0] and campos[4]=='Por fazer'):
+                lboxPorFazer.insert("end", campos[1])
+                print(campos[1])
+
+def renderLBoxFazendo():
+    f = open("Files/newTask.txt", "r", encoding="utf-8")
+    task = f.readlines()
+    f.close()
+    for linha in task:
+        campos = linha.split(";")
+
+        if(campos[0]==currentUser[0] and campos[4]=='Fazendo'):
+                lboxFazendo.insert("end", campos[1])
+                print(campos[1])
+
+def renderLBoxPorFeito():
+    f = open("Files/newTask.txt", "r", encoding="utf-8")
+    task = f.readlines()
+    f.close()
+
+    for linha in task:
+        campos = linha.split(";")
+
+        if(campos[0]==currentUser[0] and campos[4]=='Feito'):
+            lboxFeito.insert("end", campos[1])
+            print(campos[1])
+
+def changeState():
+    f = open("Files/newTask.txt", "r", encoding="utf-8")
+    task = f.readlines()
+    f.close()
+
+    if(len(lboxPorFazer.curselection())>0):
+        indice = lboxPorFazer.curselection()[0]
+        nome = lboxPorFazer.get(indice)
+
+    if(len(lboxFazendo.curselection())>0):
+        indice = lboxFazendo.curselection()[0]
+        nome = lboxFazendo.get(indice)
+
+    if(len(lboxFeito.curselection())>0):
+        indice = lboxFeito.curselection()[0]
+        nome = lboxFeito.get(indice)
+
+    for i in range (len(task)):
+        campos=task[i].split(';')
+        if (nome==campos[1]):
+            task[i]=campos[0]+';'+campos[1]+';'+campos[2]+';'+campos[3]+';'+state.get()+';'+'\n'
+    
+    f = open("Files/newTask.txt", "w", encoding="utf-8")
+    for linha in task:
+        f.write(linha)
+
+    f.close()
+    while(lboxPorFazer.size()>0):
+        lboxPorFazer.delete(0)
+    while(lboxFazendo.size()>0):
+        lboxFazendo.delete(0)
+    while(lboxFeito.size()>0):
+        lboxFeito.delete(0)
+
+    renderLBoxPorFazer()
+    renderLBoxFazendo()
+    renderLBoxPorFeito()
 
 
 
@@ -578,7 +623,7 @@ def selectionFeito():
 def addManageElements():
     global categoryLabel, categoryEntry, btnAddCategory, categoryBoxLabel, categoryDropdown, btnRemoveCategory, userLabel, userDropdown, btnRemoveUser, addUserLabel, usernameLabel, usernameEntry, passwordLabel, passwordEntry, emailLabel, emailEntry, userTypeLabel, userType, adminAddBtn, canvasAddCategory, canvasaddUser, canvasRemoveUser,catLabel
     if currentUser == []:
-        messagebox.showerror("No user is logged", "Para ver isto tem que iniciar a sessão e ter uma conta admin!")
+        messagebox.showerror("Sessão não iniciada", "Para ver isto tem que iniciar a sessão e ter uma conta admin!")
     elif currentUser[1] == "admin":
         try:
             cleanElements()
@@ -672,7 +717,7 @@ def addManageElements():
         btnRemoveUser.place(x=200, y=65)
         
     else:
-        messagebox.showerror("Access Denied", "A sua conta não tem acesso admin!")
+        messagebox.showerror("Acesso Negado", "A sua conta não tem acesso admin!")
 
     
 
@@ -682,30 +727,30 @@ def addManageElements():
 def addCategory():
     categoryValue = categoryEntry.get()
     if categoryValue.strip() == '':
-        messagebox.showerror("Error", "O valor da categoria não pode estar vazio!")
+        messagebox.showerror("Erro", "O valor da categoria não pode estar vazio!")
         return
     if os.path.exists("Files/category.txt"):
         with open("Files/category.txt", "r") as file:
             categories = file.readlines()
             for line in categories:
                 if categoryValue.strip().lower() == line.strip().lower():
-                    messagebox.showerror("Already exists", "Esta categoria já existe!")
+                    messagebox.showerror("Já Existe", "Esta categoria já existe!")
                     return
             else:
                 with open("Files/category.txt", "a") as file:
                     file.write(categoryValue.strip() + "\n")
-                    messagebox.showinfo("Category Added", f"A categoria {categoryValue} foi adicionada!")
+                    messagebox.showinfo("Categoria Adicionada", f"A categoria {categoryValue} foi adicionada!")
                     categoryEntry.delete(0, 'end')
     else:
         with open("Files/category.txt", "w") as file:
             file.write(categoryValue.strip() + "\n")
-            messagebox.showinfo("Category Added", f"TA categoria {categoryValue} foi adicionada!")
+            messagebox.showinfo("Categoria Adicionada", f"TA categoria {categoryValue} foi adicionada!")
 
 
 def removeCategory():
     selected_category = categoryDropdown.get()
     if selected_category == "":
-        messagebox.showerror("Error", "Nenhuma categoria adicionada")
+        messagebox.showerror("Erro", "Nenhuma categoria adicionada")
     else:
         with open("Files/category.txt", "r") as file:
             categories = file.readlines()
@@ -713,14 +758,14 @@ def removeCategory():
             for category in categories:
                 if category.strip() != selected_category:
                     file.write(category)
-        messagebox.showinfo("Category removed", f"A categoria {selected_category} foi removida.")
+        messagebox.showinfo("Categoria remivida", f"A categoria {selected_category} foi removida.")
         categoryDropdown['values'] = [category.strip() for category in categories if category.strip() != selected_category]
         categoryDropdown.current(0)    
 
 def removeUser():
     user = userDropdown.get()
     if user.strip() == '':
-        messagebox.showerror("Error", "Por favor selecione um utilizador para remover.")
+        messagebox.showerror("Erro", "Por favor selecione um utilizador para remover.")
         return
     if os.path.exists("Files/users.txt"):
         with open("Files/users.txt", "r") as file:
@@ -730,10 +775,10 @@ def removeUser():
                     # se o user for difrente ao index dois da linha (ou seja ao username) entao vai escrever a linha. dessa forma escreve todos os users menos o selecionado e com isto remove o
                 if user != line.split(";")[2]:
                     file.write(line)
-            messagebox.showinfo("User removed", f"O utilizador {user} foi removido.")
+            messagebox.showinfo("User removido", f"O utilizador {user} foi removido.")
             userDropdown.current(0)
     else:
-        messagebox.showerror("Error", "Não encontrada ficha do utilizador.")
+        messagebox.showerror("Erro", "Não encontrada ficha do utilizador.")
     addManageElements()
 
 
@@ -748,15 +793,15 @@ def addUser():
             users = file.readlines()
             for user in users:
                 if username == user.strip().split(';')[2]:
-                    messagebox.showerror("Error", "Nome de utilizador já usado.")
+                    messagebox.showerror("Erro", "Nome de utilizador já usado.")
                     return
     else:
-        messagebox.showerror("Error", "Não encontrada ficha do utilizador")
+        messagebox.showerror("Erro", "Não encontrada ficha do utilizador")
         return
     # add the user to the file
     with open("Files/users.txt", "a") as file:
         file.write(f"0;0;{username};{password};False;{email};{user_type}\n")
-    messagebox.showinfo("Success", "O utilizador foi adicionado com sucesso.")
+    messagebox.showinfo("Sucesso", "O utilizador foi adicionado com sucesso.")
     userDropdown['values'] = [user.strip().split(';')[2] for user in users] + [username]
     userDropdown.current(len(userDropdown['values']) - 1)
 
@@ -764,16 +809,14 @@ def addUser():
 #-----------------------------------Clean Tkinter elements------------------------#
     #esta função limpa os elementos tkinter de cada aba da pagina
 def cleanElements():
-    for button in taskButtons:
-        button.destroy()
+    welcomeLabel.destroy()
     taskLabel.destroy()
     taskName.destroy()
     btnSubmitTask.destroy()
     taskCategoryDropdown.destroy()
     taskCategoryLabel.destroy()
     #taskDate.destroy()
-    btnAddTask.destroy()
-    categoryLabel.destroy()
+    btnAddTask.destroy()     
     categoryEntry.destroy()
     btnAddCategory.destroy()
     categoryBoxLabel.destroy() 
@@ -798,7 +841,7 @@ def cleanElements():
     catLabel.destroy()
     btnRemoveTask.destroy()
     canvasTask.destroy()
-    createtaskLabel.destroy()
+    #createtaskLabel.destroy()
     treeTaskCreate.destroy()
     canvasSearch.destroy()
     lbl_filtro.destroy()
@@ -807,14 +850,26 @@ def cleanElements():
     lbl_nome.destroy()
     nome_entry.destroy()
     lbl_categ.destroy()
-    categorias.destroy()
     lbl_estado.destroy()
-    estados.destroy()
     btn_limpar.destroy()
     btn_filtrar.destroy()
     lista_tarefas.destroy()
     canvaslista.destroy()
-    #calendar.destroy()
+    #calendar.destroy()   
+    canvasDashBoard.destroy()
+    dashLabel.destroy()
+    rdPorfazer.destroy()   
+    rdFazendo.destroy()
+    rdFeito.destroy()
+    btnState.destroy()
+    canvasKaban.destroy()
+    PorFazerLabel.destroy()
+    FazendoLabel.destroy()
+    FeitoLabel.destroy()
+    lboxPorFazer.destroy()
+    lboxFazendo.destroy()
+    lboxFeito.destroy()
+    categoryLabel.destroy()  
 
 #-----------------------------------MainScreen----------------------------#
 
@@ -865,10 +920,7 @@ btnDashboard.place(x=1, y=134)
 btnGerirCat = Button(btnCanvas, width = 15, height= 3, text = "Gerir", bd=1, fg='white', bg='#006BB8',font=("Verdana", 12), relief = "raised", command=addManageElements)
 btnGerirCat.place(x=1, y=200)
 
-""" ImgCanvas = Canvas(window, width = 600, height = 455, bd=0, bg='#a3d9ff', relief = "flat")
-ImgCanvas.place(x=195, y=40) """
-#ImgCanvas.create_image(10,250, image = '')
-
-
+welcomeLabel = Label(window, width = 30, height = 10, text = "Bem Vindo!!!\nA nossa ToDoList!!!", bg='#FDF4E3', fg="black", font=("Verdana", 30))
+welcomeLabel.place(x=200,y=50)
 
 window.mainloop()
