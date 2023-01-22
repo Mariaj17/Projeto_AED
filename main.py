@@ -286,6 +286,9 @@ def addTask():
     with open("Files/tasksDone.txt", "w") as file:
         file.write(f"{currentUser[0]};{categoryValue};\n")
 
+    
+
+
 def createTree():
     treeTaskCreate.delete(*treeTaskCreate.get_children())
     if currentUser == []:
@@ -318,6 +321,35 @@ def createTree():
             if (currentUser[i]==campos[0]):
                 treeTaskCreate.insert("", "end", values=(campos[1], campos[2], campos[3],campos[4]))
 
+def removetask():
+    selected_item = treeTaskCreate.selection()[0] ## get selected item
+
+    f = open("files/tasksDoing.txt", "r", encoding="utf-8")
+    ficheiro = f.readlines()
+    f.close()
+    for linha in ficheiro:              #Vai a cada linha do ficheiro
+        campos=linha.split(";")
+        for item in treeTaskCreate.get_children():  #Vai buscar os valores da treeview
+            if(campos[2] == item):
+                treeTaskCreate.delete(selected_item) #Apaga a linha da treeview
+
+    f = open("files/tasksDone.txt", "r", encoding="utf-8")
+    ficheiro = f.readlines()
+    f.close()
+    for linha in ficheiro:
+        campos=linha.split(";")
+        for item in treeTaskCreate.get_children():
+            if(campos[2] == item):
+                treeTaskCreate.delete(selected_item)
+
+    f = open("files/tasksNotDone.txt", "r", encoding="utf-8")
+    ficheiro = f.readlines()
+    f.close()
+    for linha in ficheiro:
+        campos=linha.split(";")
+        for item in treeTaskCreate.get_children():
+            if(campos[2] == item):
+                treeTaskCreate.delete(selected_item)
 
 
 #-----------------------------------pesquisa------------------------------#
@@ -531,7 +563,7 @@ def addManageElements():
                 userDropdown['values'] = [user.strip().split(';')[2] for user in users]
                 userDropdown.current(0)
 
-        btnRemoveUser = Button(canvasRemoveUser, text="Remover Utilizador",font=("Verdana", 10))
+        btnRemoveUser = Button(canvasRemoveUser, text="Remover Utilizador",font=("Verdana", 10), command=removeUser)
         btnRemoveUser.place(x=200, y=65)
         
     else:
