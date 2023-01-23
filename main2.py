@@ -463,7 +463,7 @@ def addTaskElements():
     btnAlterarTask = Button(canvasAddTask, text="Alterar", width = 12, height= 1, font=("Verdana", 10), command=alterarDados)
     btnAlterarTask.place(x=540,y=70)
 
-    btnRemoverTask = Button(canvasAddTask, text="Remover", width = 12, height= 1, font=("Verdana", 10))
+    btnRemoverTask = Button(canvasAddTask, text="Remover", width = 12, height= 1, font=("Verdana", 10), command=remover)
     btnRemoverTask.place(x=540,y=120)
 
     #Button Enviar Tarefa
@@ -507,7 +507,10 @@ def addTask():
     categoryValue = taskCategoryDropdown.get()
     selectedDate = taskDate.get_date()
     estadoValue = taskEstadoDropdown.get()
-    newTask = taskValue + ";" + categoryValue[0:len(categoryValue)-1] + ";" + selectedDate + ";" + estadoValue[0:len(estadoValue)-1] + ";" + "\n"
+    if taskValue == "" or categoryValue == "" or selectedDate == "" or estadoValue == "":
+        messagebox.showerror("Preencha tudo!", "Preencha todos os dados da tarefa")
+    else:
+        newTask = taskValue + ";" + selectedDate + ";" + categoryValue[0:len(categoryValue)-1] + ";" + estadoValue[0:len(estadoValue)-1] + ";" + "\n"
     f = open("Files/newTask.txt", "a", encoding="utf-8")
     f.write(newTask)
     f.close()
@@ -515,6 +518,25 @@ def addTask():
     limpar2()
     
 #-----------------------------------pesquisa------------------------------#
+
+def remover():
+    taskSelection = treeTaskCreate.selection()[0]
+    task = list(treeTaskCreate.item(taskSelection, "values"))
+    task_join = task[0] + ";" + task[1] + ";" + task[2] + ";" + task[3] + ";" + "\n"
+    print(task_join)
+
+    f = open("Files/newTask.txt", "r+", encoding="utf-8")
+    allTasks = f.readlines()
+    f.close()
+    f = open("Files/newTask.txt", "w", encoding="utf-8")
+    for linha in allTasks:
+        if task_join != linha:
+            f.write(linha)
+    f.close()
+    treeTaskCreate.delete(*treeTaskCreate.get_children())
+    mostrar()
+    messagebox.showinfo(title="Feito!", message="Tarefa removida com sucesso!")
+
 
 
 def alterarDados():
@@ -533,7 +555,7 @@ def alterarDados():
             categoryValue = taskCategoryDropdown.get()
             selectedDate = taskDate.get_date()
             estadoValue = taskEstadoDropdown.get()
-            newTask = taskValue + ";" + categoryValue[0:len(categoryValue)-1] + ";" + selectedDate + ";" + estadoValue[0:len(estadoValue)-1] + ";" + "\n"
+            newTask = taskValue + ";" + selectedDate + ";" + categoryValue[0:len(categoryValue)-1] + ";" + estadoValue[0:len(estadoValue)-1] + ";" + "\n"
             f.write(newTask)
         else:
             f.write(linha)
@@ -556,8 +578,8 @@ def filtrar():
     for i in range (len(tarefas)):
         campos = tarefas[i].split(";")
         if nome_entry.get().upper() == campos[0].upper() or nome_entry.get() == "":
-            if campos[1] in categorias.get() or categorias.get() == "":
-                if calendar.get_date() == (campos[2].replace("-", "/")) or calendar.get_date() == "":
+            if calendar.get_date() == (campos[1].replace("-", "/")) or calendar.get_date() == "":
+                if campos[2] in categorias.get() or categorias.get() == "":
                     if estados.get() == (campos[3]) or estados.get() == "": 
                         lista_tarefas.insert("", "end", values=(campos[0],campos[1], campos[2], campos[3]))
                         tar += 1
