@@ -488,8 +488,17 @@ def addTaskElements():
 
     treeTaskCreate.place(x=0, y=0)
 
+    f = open("Files/newTask.txt", "r", encoding="utf-8")
+    addNewTaskTree = f.readlines()
+    f.close()
+    treeTaskCreate.delete(*treeTaskCreate.get_children())
+    for i in range (len(addNewTaskTree)):
+        campos = addNewTaskTree[i].split(";")
+        treeTaskCreate.insert("", "end", values=(campos[0],campos[1], campos[2], campos[3]))
+
 
 def mostrar():
+    treeTaskCreate.place(x=0, y=0)
     f = open("Files/newTask.txt", "r", encoding="utf-8")
     addNewTaskTree = f.readlines()
     f.close()
@@ -540,6 +549,7 @@ def remover():
 
 
 def alterarDados():
+    global taskValue, selectedDate, categoryValue, estadoValue
     taskSelection = treeTaskCreate.selection()[0]
     task = list(treeTaskCreate.item(taskSelection, "values"))
     task_join = task[0] + ";" + task[1] + ";" + task[2] + ";" + task[3] + ";" + "\n"
@@ -551,10 +561,22 @@ def alterarDados():
     f = open("Files/newTask.txt", "w", encoding="utf-8")
     for linha in allTasks:
         if task_join == linha:
-            taskValue = taskName.get()
-            categoryValue = taskCategoryDropdown.get()
-            selectedDate = taskDate.get_date()
-            estadoValue = taskEstadoDropdown.get()
+            if taskName.get() != "":
+                taskValue = taskName.get()
+            else:
+                taskValue = task[0]
+            if taskDate.get_date() != "":
+                selectedDate = taskDate.get_date()
+            else:
+                selectedDate = task[1]
+            if taskCategoryDropdown.get() != "":
+                categoryValue = taskCategoryDropdown.get()
+            else:
+                categoryValue = task[2]
+            if taskEstadoDropdown.get() != "":
+                estadoValue = taskEstadoDropdown.get()
+            else:
+                estadoValue = task[3]
             newTask = taskValue + ";" + selectedDate + ";" + categoryValue[0:len(categoryValue)-1] + ";" + estadoValue[0:len(estadoValue)-1] + ";" + "\n"
             f.write(newTask)
         else:
@@ -682,32 +704,142 @@ def grad_date2():
 
 #---------------------------------------- Personal Area------------------#
 def addPersonalElements():
-    global taskButtons
-    taskButtons = []
+    global comentario, lbl_coment, treeComentario, treeTaskCreate
     try:
         cleanElements()
     except:
         pass
+    print('sim')
     if currentUser == []:
         messagebox.showerror("No user is logged", "Para ver isto tem que iniciar a sessão e ter uma conta admin!")
         return
-    if os.path.exists("Files/tasksNotDone.txt"):
-        i = 1
-        with open("Files/tasksNotDone.txt", "r") as file:
-            for line in file:
-                userTask = line.strip().split(";")
-                if currentUser[0] == userTask[0]:
-                    task_list = userTask[2:]
-                    for j, task in enumerate(task_list):
-                        taskButton = Button(window, text=task[1:-1])
-                        taskButton.grid(row=i+j, column=1)
-                        taskButtons.append(taskButton)
-    else:
-        messagebox.showerror("No task", "Não há tarefas")
 
+    #Canvas Add Task
+    canvasAddComent = Canvas(window,  width = 650, height = 200, bg='#a3d9ff', bd=1, relief = "flat")
+    canvasAddComent.place(x=200, y=50)
+
+    comentario = Entry(window)
+    comentario.place(x=220, y=70, width= 200, height=165)
+
+    lbl_coment = Label(window, text="Comentário", font = ("Verdana",8))
+    lbl_coment.place(x=280, y=75)
+
+    treeComentario = ttk.Treeview(canvasAddComent, height=7, column=("col1"))
+    treeComentario.heading("#0", text="")
+    treeComentario.heading("#1", text="Comentário")
+
+    treeComentario.column("#0", width=0)
+    treeComentario.column("#1", width=200)
+
+    treeComentario.place(x= 230, y=20)
+
+    # Botões Alterar e Remover
+    btn_Addcomentarios = Button(canvasAddComent, text="Adicionar comentário", width = 18, height= 1, bd=1, fg='white', bg='#006BB8', relief = "raised", font=("Verdana", 10), command=addComentario)
+    btn_Addcomentarios.place(x=480, y=50)
+
+    btn_Seecomentario = Button(canvasAddComent, text="Ver comentário", width = 18, height= 1, bd=1, fg='white', bg='#006BB8', relief = "raised", font=("Verdana", 10), command=verComentarios)
+    btn_Seecomentario.place(x=480, y=100)
+
+    canvasTask = Canvas(window,  width = 645, height = 300, bg='#a3d9ff', bd=1, relief = "flat")
+    canvasTask.place(x=200,y=250)
+
+    treeTaskCreate = ttk.Treeview(canvasTask, height=14, column=("col1", "col2", "col3", "col4"))
+    treeTaskCreate.heading("#0", text="")
+    treeTaskCreate.heading("#1", text="Nome")
+    treeTaskCreate.heading("#2", text="Data")
+    treeTaskCreate.heading("#3", text="Categoria")
+    treeTaskCreate.heading("#4", text="Estado")
+
+    treeTaskCreate.column("#0", width=0)
+    treeTaskCreate.column("#1", width=200)
+    treeTaskCreate.column("#2", width=150)
+    treeTaskCreate.column("#3", width=150)
+    treeTaskCreate.column("#4", width=150)
+
+    treeTaskCreate.place(x=0, y=0)
     
+    f = open("Files/newTask.txt", "r", encoding="utf-8")
+    addNewTaskTree = f.readlines()
+    f.close()
+    treeTaskCreate.delete(*treeTaskCreate.get_children())
+    for i in range (len(addNewTaskTree)):
+        campos = addNewTaskTree[i].split(";")
+        treeTaskCreate.insert("", "end", values=(campos[0],campos[1], campos[2], campos[3]))
 
 
+def addComentario():
+    if currentUser == []:
+        messagebox.showerror("No user is logged", "Para ver isto tem que iniciar a sessão e ter uma conta admin!")
+        return
+    global i_TarefaComentario
+    treeComentario.delete(*treeComentario.get_children())
+    if comentario.get() == "":
+        messagebox.showerror("Escreva algo!", "Escreva um comentário!")
+    else:
+        taskSelection = treeTaskCreate.selection()[0]
+        task = list(treeTaskCreate.item(taskSelection, "values"))
+        task_join = task[0] + ";" + task[1] + ";" + task[2] + ";" + task[3] + ";" + "\n"
+        print(task_join)
+
+        f = open("Files/newTask.txt", "r+", encoding="utf-8")
+        allTasks = f.readlines()
+        f.close()
+        for i in range(len(allTasks)):
+            for c in range(len(allTasks[i])):
+                if task_join == allTasks[i]:
+                    i_TarefaComentario = i  #index do tarefa associada ao comentario
+
+        f = open("Files/comenarios.txt", "r", encoding="utf-8")
+        coments = f.readlines()
+        f.close()
+        print(coments)
+        if coments != []:
+            for i in range(len(coments)):
+                campos = coments[i].split(";")
+                if str(i_TarefaComentario) == campos[1]:
+                    messagebox.showerror("Erro!", "Está tarefa já tem um comentário associado!")
+                else:
+                    f = open("Files/comenarios.txt", "a", encoding="utf-8")
+                    coment = comentario.get()
+                    f.write(coment + ";" + str(i_TarefaComentario) + ";" + "\n")
+                    f.close()
+                    comentario.delete(0, END)
+                    messagebox.showinfo("Sucesso!", "Comentário adicionado!")
+        else:
+            f = open("Files/comenarios.txt", "a", encoding="utf-8")
+            coment = comentario.get()
+            f.write(coment + ";" + str(i_TarefaComentario) + ";" + "\n")
+            f.close()
+            comentario.delete(0, END)
+            messagebox.showinfo("Sucesso!", "Comentário adicionado!")
+
+
+def verComentarios():
+    if currentUser == []:
+        messagebox.showerror("No user is logged", "Para ver isto tem que iniciar a sessão e ter uma conta admin!")
+        return
+    treeComentario.delete(*treeComentario.get_children())
+    taskSelection = treeTaskCreate.selection()[0]
+    task = list(treeTaskCreate.item(taskSelection, "values"))
+    task_join = task[0] + ";" + task[1] + ";" + task[2] + ";" + task[3] + ";" + "\n"
+    print(task_join)
+
+    f = open("Files/newTask.txt", "r+", encoding="utf-8")
+    allTasks = f.readlines()
+    f.close()
+    for i in range(len(allTasks)):
+        for c in range(len(allTasks[i])):
+            if task_join == allTasks[i]:
+                i_TarefaComentario = i  #index do tarefa associada ao comentario
+    f = open("Files/comenarios.txt", "r", encoding="utf-8")
+    coments = f.readlines()
+    for i in range(len(coments)):
+        campos = coments[i].split(";")
+        if str(i_TarefaComentario) == campos[1]:
+            treeComentario.insert("", "end", values=(campos[0]))
+        else:
+            messagebox.showerror("Erro!", "Não há comentários para esta tarefa!")
+    f.close()
 
 
 #-----------------------------------Admin Menu---------------------------#
