@@ -7,7 +7,7 @@ from users import *
 import utils
 from pesquisa import *
 from pip import *
-""" from tkcalendar import Calendar """
+from tkcalendar import Calendar
 
 
 global window
@@ -279,6 +279,8 @@ def addTaskElements():
     treeTaskCreate.column("#4", width=150)
 
     treeTaskCreate.place(x=0, y=0)
+    if currentUser != []:
+        updateTreeview()
 
 
 def addTask():
@@ -298,12 +300,23 @@ def addTask():
     addNewTaskTree = f.readlines()
     f.close()
     treeTaskCreate.delete(*treeTaskCreate.get_children())
-    for i in range (len(addNewTaskTree)):
-        campos = addNewTaskTree[i].split(";")
-        treeTaskCreate.insert("", "end", values=(campos[1],campos[2], campos[3], campos[4]))
+    with open("Files/newTask.txt", "r", encoding="utf-8") as file:
+        for line in file:
+            task = line.strip().split(";")
+            if task[0] == currentUser[0]:
+                treeTaskCreate.insert("", END, values=(task[1], task[2], task[3], task[4]))
     
 
-
+def updateTreeview():
+    f = open("Files/newTask.txt", "r", encoding="utf-8")
+    addNewTaskTree = f.readlines()
+    f.close()
+    treeTaskCreate.delete(*treeTaskCreate.get_children())
+    with open("Files/newTask.txt", "r", encoding="utf-8") as file:
+        for line in file:
+            task = line.strip().split(";")
+            if task[0] == currentUser[0]:
+                treeTaskCreate.insert("", END, values=(task[1], task[2], task[3], task[4]))
 #-----------------------------------pesquisa------------------------------#
 
 
