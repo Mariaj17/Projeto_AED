@@ -1,5 +1,5 @@
 admin;titulo;Estudo;02/01/2023;Por fazer;
-admin;Nao;Estudo;02/01/2023;Feito;
-admin;olaaaa;Estudo;20/01/2023;Feito;
+admin;Nao;Estudo;02/01/2023;Por fazer;
+admin;olaaaa;Estudo;20/01/2023;Fazendo;
 jose;aaaaaa;Casa;;Por fazer;
 jose;dgfdfsgdgf;Estudo;;Por fazer;

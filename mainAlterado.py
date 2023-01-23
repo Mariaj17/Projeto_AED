@@ -296,9 +296,6 @@ def addTask():
     f = open("Files/newTask.txt", "a", encoding="utf-8")
     f.write(newTask)
     f.close()
-    f = open("Files/newTask.txt", "r", encoding="utf-8")
-    addNewTaskTree = f.readlines()
-    f.close()
     treeTaskCreate.delete(*treeTaskCreate.get_children())
     with open("Files/newTask.txt", "r", encoding="utf-8") as file:
         for line in file:
@@ -308,9 +305,6 @@ def addTask():
     
 
 def updateTreeview():
-    f = open("Files/newTask.txt", "r", encoding="utf-8")
-    addNewTaskTree = f.readlines()
-    f.close()
     treeTaskCreate.delete(*treeTaskCreate.get_children())
     with open("Files/newTask.txt", "r", encoding="utf-8") as file:
         for line in file:
@@ -484,14 +478,14 @@ def grad_date2():
     print(searchValue) """
 #---------------------------------------- Personal Area------------------#
 def addPersonalElements():
-    global canvasDashBoard, dashLabel, state, rdPorfazer, rdFazendo, rdFeito, btnState, canvasKaban, PorFazerLabel, FazendoLabel, FeitoLabel, lboxPorFazer, lboxFazendo, lboxFeito
+    global canvasDashBoard, dashLabel, state, rdPorfazer, rdFazendo, rdFeito, btnState, canvasKaban, PorFazerLabel, FazendoLabel, FeitoLabel, lboxPorFazer, lboxFazendo, lboxFeito, lboxAdded, btnSave
     try:
         cleanElements()
     except:
         pass
     print('sim')
     if currentUser == []:
-        messagebox.showerror("No user is logged", "Para ver isto tem que iniciar a sessão e ter uma conta admin!")
+        messagebox.showerror("No user is logged", "Para ver isto tem que iniciar a sessão!")
         return
     #Canvas Dashboard
     canvasDashBoard = Canvas(window,  width = 200, height = 200, bg='#a3d9ff', bd=1, relief = "flat")
@@ -509,39 +503,49 @@ def addPersonalElements():
     rdFeito = Radiobutton(canvasDashBoard, text = "Feito", bg="#a3d9ff", font=("Verdana", 11), value = "Feito", variable = state)
     rdFeito.place(x=10, y=120)
 
+    btnSave = Button(canvasDashBoard, text="Save Task", width = 15, height= 1, bd=1, fg='white', bg='#006BB8', relief = "raised", font=("Verdana", 10), command=saveTask)
+    btnSave.place(x=40, y=150)
+
     btnState = Button(canvasDashBoard, text="Mudar Estado", width = 15, height= 1, bd=1, fg='white', bg='#006BB8', relief = "raised", font=("Verdana", 10), command=changeState)
-    btnState.place(x=40, y=160)
+    btnState.place(x=40, y=175)
 
 
     #Canvas Kaban
     canvasKaban = Canvas(window, width = 450, height = 505, bg='#a3d9ff', bd=1, relief = "flat")
     canvasKaban.place(x=200,y=50)
 
-    PorFazerLabel= Label(canvasKaban, width = 17, height = 2, text="Por Fazer", bg="#E03C32", font=("Verdana", 11))
+    PorFazerLabel= Label(canvasKaban, width = 12, height = 2, text="Por Fazer", bg="#E03C32", font=("Verdana", 11))
     PorFazerLabel.place(x=0,y=0)
 
-    FazendoLabel= Label(canvasKaban, width = 17, height = 2, text="Fazendo", bg="#FFD301", font=("Verdana", 11))
-    FazendoLabel.place(x=150,y=0)
+    FazendoLabel= Label(canvasKaban, width = 12, height = 2, text="Fazendo", bg="#FFD301", font=("Verdana", 11))
+    FazendoLabel.place(x=115,y=0)
 
-    FeitoLabel= Label(canvasKaban, width = 17, height = 2, text="Feito", bg="#7BB662", font=("Verdana", 11))
-    FeitoLabel.place(x=300,y=0)
+    FeitoLabel= Label(canvasKaban, width = 12, height = 2, text="Feito", bg="#7BB662", font=("Verdana", 11))
+    FeitoLabel.place(x=230,y=0)
 
-    
-    lboxPorFazer=Listbox(canvasKaban, width=25, height=29, selectmode='single', selectbackground='red')
+    AddedLabel = Label(canvasKaban, width = 12, height = 2, text="Adicionadas", bg="#A020F0", font=("Verdana", 11))
+    AddedLabel.place(x=345,y=0)
+
+    lboxPorFazer=Listbox(canvasKaban, width=19, height=29, selectmode='single', selectbackground='red')
     lboxPorFazer.place(x=0,y=40)
     lboxPorFazer.bind("<<Listbox Select>>", selectionPorFazer)
     renderLBoxPorFazer()
 
-
-    lboxFazendo=Listbox(canvasKaban, width=25, height=29, selectmode='single', selectbackground='yellow')
-    lboxFazendo.place(x=150,y=40)
+    lboxFazendo=Listbox(canvasKaban, width=19, height=29, selectmode='single', selectbackground='yellow')
+    lboxFazendo.place(x=115,y=40)
     lboxFazendo.bind("<<Listbox Select>>", selectionFazendo)
     renderLBoxFazendo()
 
-    lboxFeito=Listbox(canvasKaban, width=25, height=29, selectmode='single', selectbackground='green')
-    lboxFeito.place(x=300,y=40)
+    lboxFeito=Listbox(canvasKaban, width=19, height=29, selectmode='single', selectbackground='green')
+    lboxFeito.place(x=230,y=40)
     lboxFeito.bind("<<Listbox Select>>", selectionFeito)
     renderLBoxPorFeito()
+
+    lboxAdded= Listbox(canvasKaban, width=19, height=29, selectmode='single', selectbackground='blue')
+    lboxAdded.place(x=345,y=40)
+    lboxAdded.bind("<<Listbox Select>>", selectionAdded)
+    renderLBoxAdded()
+
 
 
 def selectionPorFazer():
@@ -557,6 +561,9 @@ def selectionFeito():
     indice = lboxFazendo.curselection()  
     textFeito = lboxFazendo.get(indice)
 
+def selectionAdded():
+    indice = lboxAdded.curselection()
+    textAdded = lboxAdded.get(indice)
     
 
 def renderLBoxPorFazer():
@@ -592,6 +599,34 @@ def renderLBoxPorFeito():
             lboxFeito.insert("end", campos[1])
             print(campos[1])
 
+def renderLBoxAdded():
+    with open ("Files/users.txt", "r") as file:
+        userList = file.readlines()
+        #Obter o index de uma linha utilizando o username
+        for i in range(len(userList)):
+            if currentUser[0] in userList[i]:
+                index = i
+                #verifica as atividades do utilizador no momento em que vai fazer logout. este valor sera depois comparado com o total de atividades de forma a criar a notificação
+                currentActivities = userList[index].strip().split(";")[7:]
+                for activity in currentActivities:
+                    lboxAdded.insert("end", activity)
+                try:
+                    print(currentActivities)
+                except ValueError:
+                    pass
+
+def saveTask():
+    selected = lboxAdded.get(ACTIVE)
+    with open("Files/newTask.txt", "a") as file:
+        file.write(
+            currentUser[0] + ";" +
+            selected + ";" +
+            "none" + ";" +
+            "noDate" + ";" +
+            "Por fazer" + ";" + "\n"
+            )
+
+
 def changeState():
     f = open("Files/newTask.txt", "r", encoding="utf-8")
     task = f.readlines()
@@ -609,6 +644,10 @@ def changeState():
         indice = lboxFeito.curselection()[0]
         nome = lboxFeito.get(indice)
 
+    if(len(lboxAdded.curselection())>0):
+        indice = lboxAdded.curselection()[0]
+        nome = lboxAdded.get(indice)
+
     for i in range (len(task)):
         campos=task[i].split(';')
         if (nome==campos[1]):
@@ -625,12 +664,13 @@ def changeState():
         lboxFazendo.delete(0)
     while(lboxFeito.size()>0):
         lboxFeito.delete(0)
+    while(lboxAdded.size()>0):
+        lboxAdded.delete(0)
 
     renderLBoxPorFazer()
     renderLBoxFazendo()
     renderLBoxPorFeito()
-
-
+    renderLBoxAdded()
 
 #-----------------------------------Admin Menu---------------------------#
 def addManageElements():
